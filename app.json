@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "spawnNative1.0.0",
-    "slug": "spawnNative1.0.0",
+    "slug": "my-app",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
