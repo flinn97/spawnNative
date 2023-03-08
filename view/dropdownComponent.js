@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import downArrow from '../assets/downArrow.png' 
+import downArrow from '../assets/right.webp' 
 // import Slider from 'react-native-slider';
 import {
   SafeAreaView,

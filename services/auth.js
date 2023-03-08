@@ -14,7 +14,10 @@ class Auth {
         let list= componentList.getComponents();
         let IDlist = [];
         for(const key in list){
-            IDlist.push(list[key].getJson()._id)
+            if(list[key]){
+                IDlist.push(list[key]?.getJson()._id)
+
+            }
         }
         let rawData = [];
         const components = await query(collection(db, "DNDusers", "DNDAPP", "components"), where('owner', '==', email));
@@ -25,7 +28,9 @@ class Auth {
             rawData.push(data);
             }
         }
+        
         await componentList.addComponents(rawData, false);
+        
     }
 
     async getPics( componentList) {
@@ -116,12 +121,17 @@ class Auth {
             .catch((error) => {
                 const errorCode = error.code;
                 const errorMessage = error.message;
+                console.log(error)
+
             });
             if(user){
+               
+
                 let saveUser =  user
                 // await localStorage.setItem("user", JSON.stringify(saveUser));
                 await this.getuser(email, componentList);
                 user=await componentList.getComponent('user');
+                
             }
             return user;
     }

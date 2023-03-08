@@ -23,7 +23,7 @@ import {
 // } from 'react-native-reanimated';
 // import CircularProgress from 'react-native-circular-progress-indicator';
 
-import SelectFileComponent from './selectFileComponent';
+// import SelectFileComponent from './selectFileComponent';
 import DropDownComponent from './dropdownComponent';
 import InputComponent from './inputComponent';
 export default class Createspawns extends Component{
@@ -217,7 +217,7 @@ render(){
   this.setState({list:list, delList});
  }} editable={true} media={[...this.state.list]} />
  {/* {this.state.currentPic&&(<Image  source={{uri:this.state.currentPic}} style={{width:200, height:200,}}/>)} */}
-  <SelectFileComponent setPic={this.setPic} app={this.props.app} />
+  {/* <SelectFileComponent setPic={this.setPic} app={this.props.app} /> */}
   <DropDownComponent list={['monsters', 'heroes', 'worlds', 'maps', 'statblocks']} obj={state.currentComponent} name="type" app={app} />
   <InputComponent obj={state.currentComponent} name="name" app={app} />
   <InputComponent obj={state.currentComponent} name="destinationURL" app={app} />

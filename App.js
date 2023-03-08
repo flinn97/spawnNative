@@ -1,10 +1,4 @@
-import dog from './assets/dog.png'
-import duck from './assets/duck.png'
-import ladybug from './assets/ladybug.png'
-import mouse from './assets/mouse.png'
-import turkey from './assets/turkey.png'
-import what from './assets/what.png'
-import wolf from './assets/wolf.png'
+
 import auth from './services/auth'
 import Dispatch from './view/dispatch';
 import React, {Component} from 'react';
@@ -29,7 +23,7 @@ class App extends Component {
     this.dispatch=this.dispatch.bind(this);
     this.menuSlide=this.menuSlide.bind(this);
     this.state={
-      arr:[dog,duck,ladybug,mouse,turkey,what,wolf],
+      arr:[],
       pic: undefined,
       index: 0,
       nextPic: undefined,
@@ -50,7 +44,7 @@ class App extends Component {
     };
   }
   async menuSlide(){
-    console.log("menu")
+    
     if(this.state.positionSideBar===-300){
       for(let i=-300; i<=0; i+=25){
         const delay = ms => new Promise(res => setTimeout(res, ms));

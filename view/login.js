@@ -40,10 +40,13 @@ async handleSubmission(){
 render(){
   let app=this.props.app;
   let state=app?.state;
+  let styles=state.styles;
 
   return (
-    <View>
-      <Text>Spawn Login</Text>
+    <View >
+      <Text style={{
+      background: styles.colors.Red1
+    }}>Spawn</Text>
         <TextInput
       style={{width:this.props.width? this.props.width:200, height:30, backgroundColor:this.props.backgroundColor, borderWidth: !this.props.border?1:0, borderRadius:7,  marginLeft:this.props.center?10:0, fontSize:this.props.fontSize, color:this.props.color}}
         onChangeText={(text)=>{

@@ -1,5 +1,5 @@
-import keep from "../assets/keepIcon.png"
-import spawn from "../assets/spawnIcon.png"
+import keep from "../assets/keep.png"
+import spawn from "../assets/spawnLogo.png"
 import React, {Component} from 'react';
 import {
   Image,

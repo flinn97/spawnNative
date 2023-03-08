@@ -35,7 +35,6 @@ export default class InputComponent extends Component{
   }
    async componentDidMount(){
     if(!this.props.prepareOnPress){
-      // console.log(this.props.obj.getJson)
       await this.setState({obj:this.props.obj, value: this.props.obj.getJson()[this.props.name]})
 
     }

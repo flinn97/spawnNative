@@ -4,6 +4,7 @@ import SwipeRender from "react-native-swipe-render";
 import Swipeable from 'react-native-gesture-handler/Swipeable';
 import auth from '../services/auth';
 import ViewMedia from './viewMedia';
+import LikeHeart from '../assets/likeheart.webp'
 const { width } = Dimensions.get('window')
 import {
   Image,
@@ -64,29 +65,19 @@ render(){
   let state=app.state;
   let dispatch=app.dispatch
   let pic = state?.pic?.getJson().picURL;
-  let comps = state.componentList.getList("monsters")
+  let comps = state.componentList.getList("monsters");
+  
   return (
-
     <View style={{width:"100%", height:"80%", background:"white", display:"flex", justifyContent:"center", alignItems:"center"}}>
       {state.pic&&(
         <View style={{width:"100%", height:500}}>
         <SwipeRender style={{ backgroundColor:"white" }} 
-        // data={[{ uri: "https://luehangs.site/pic-chat-app-images/pexels-photo-853168.jpeg" }]}
-      //   renderItem={({ c, index }) => {
-      //     return (
-      //       <Text>{c?.uri}</Text>
-      //         // <View key={"SwipeRender-slide#" + index} style={{flex: 1, backgroundColor: "#000"}}>
-      //         //     <Image style={{width:500, height:450 }} source={{uri:c?.getJson().picURL}}/>
-      //         // </View>
-      //     );
-      // }}
+
       index={state.index}
-      // loop={true}
+      
       enableAndroidViewPager={false}
-      // loadMinimal={true} // default false
-      // loadMinimalSize={2}
-      // autoplay={true} // default false
-      horizontal={true} // default true
+      
+      horizontal={true}
         >
 
           

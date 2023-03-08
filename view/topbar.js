@@ -1,4 +1,4 @@
-import topbar from "../assets/spawnLogo.png"
+import topbar from "../assets/icon.png"
 import React, {Component} from 'react';
 import Menu1 from '../assets/menu-1.png';
 
