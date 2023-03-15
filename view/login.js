@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import Logo from '../assets/spawnLogo.png';
 
 import {
   SafeAreaView,
@@ -7,7 +8,7 @@ import {
   Image,
   StyleSheet,
   TextInput,
-  Text,
+  Text, Dimensions,
   TouchableOpacity,
   useColorScheme,
   View,
@@ -37,33 +38,65 @@ async handleSubmission(){
   }
 }
 
+
+
 render(){
   let app=this.props.app;
   let state=app?.state;
   let styles=state.styles;
 
   return (
-    <View >
-      <Text style={{
-      background: styles.colors.Red1
-    }}>Spawn</Text>
-        <TextInput
-      style={{width:this.props.width? this.props.width:200, height:30, backgroundColor:this.props.backgroundColor, borderWidth: !this.props.border?1:0, borderRadius:7,  marginLeft:this.props.center?10:0, fontSize:this.props.fontSize, color:this.props.color}}
+    
+    <View style={{ width: styles.width,}}>
+      <Image
+      source={Logo}
+      resizeMode="contain"
+      style={{width: styles.width,
+       height: undefined, aspectRatio: 1.7, 
+      backgroundColor:styles.colors.Red2, alignSelf:"center",
+      
+      }}
+      />
+      {/* <Text style={{
+      color: styles.colors.Red1, zIndex:2,
+      fontFamily:"Title", fontSize:43, marginBottom:22,
+      alignSelf:"center", textAlign: "center", resizeMode:"center",
+      textAlignVertical: "center",
+    }}
+    >Login</Text> */}
+    <>
+      <>
+        
+        <TextInput placeholder='  Email'
+      style={{
+        ...styles.textField, alignSelf:"center",
+         }}
         onChangeText={(text)=>{
           this.setState({
             email:text
           });
         }}
       />
-      <TextInput
+      </>
+      <>
+      
+      <TextInput placeholder='  Password'
         secureTextEntry={true}
-          style={{borderColor:"black", borderWidth :1, borderRadius:7, width:250, height:40, marginTop:7}}
+          style={{
+            ...styles.textField,
+            alignSelf:"center",}}
             onChangeText={(text)=>{
               this.setState({password:text})
             }}
             type="password"
           />
-          <TouchableOpacity onPress={this.handleSubmission}><Text>Login</Text></TouchableOpacity>
+          </></>
+          <TouchableOpacity onPress={this.handleSubmission} 
+          style={{ alignSelf:"center", }}>
+            <Text style={{...styles.buttonPositive, justifySelf:"center", fontSize:20,
+            alignSelf:"center", marginTop:styles.margins.marginLg, width:102, 
+          }}>Login</Text>
+            </TouchableOpacity>
       </View>
   );
 }

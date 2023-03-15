@@ -21,6 +21,7 @@ import Following from './follow.js';
 import ContextMenu from './contextMenu';
 
 
+
 export default class Dispatch extends Component {
   constructor(props){
     super(props);
@@ -37,16 +38,21 @@ export default class Dispatch extends Component {
     }
   }
 render(){
+  let app=this.props.app;
+  let state=app?.state;
+  let styles=state.styles;
+
   
   return (
-
-    <View style={{width:"100%", height:"100%", background:"white", display:"flex", justifyContent:"center", alignItems:"center"}}>
+<>
+    <View style={{width:styles.width, height:styles.height, backgroundColor:styles.colors.Grey1, display:"flex", padding: 2,
+    justifyContent:"center", alignItems:"center"}}>
           {this.props.app.state.popupSwitch==="eula"&&(<Eula app={this.props.app}/>)}
 
       <Menu app={this.props.app}/>
 
       {(this.props.app.state.context &&this.props.app.state.contextContent )&&(
-      <View style={{position:'absolute', bottom:this.props.app.state.contextBottom, zIndex:500, width:"95%"}}>
+      <View style={{position:'absolute', bottom:this.props.app.state.contextBottom, backgroundColor:styles.colors.Red2, zIndex:500, width:"95%"}}>
       <ContextMenu app={this.props.app} content={this.props.app.state.contextContent} user={this.props.app.state.user} reportUser={this.props.app.state.reportUser} name={this.props.app.state.contextContent.getJson().picURL!==""? "picURL":"picURLs"}/>
     </View>
     )}
@@ -60,7 +66,7 @@ render(){
         
         <Nav app={this.props.app}/> 
     </View>     
-
+    </>
 );
 }
 

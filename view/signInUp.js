@@ -38,9 +38,15 @@ export default class SignInUp extends Component{
 render(){
   let app=this.props.app;
   let state=app?.state;
+  let styles=state.styles;
 
   return (
-        <View>
+        <View
+        style={{
+          flexDirection: 'column',
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}>
           {this.state.register?(<Register app={app}/>):(<Login app={app}/>)}
           <TouchableOpacity
           onPress={()=>{
@@ -55,7 +61,9 @@ render(){
             }
             
           }}
-          ><Text>{this.state.register?"Login":"register"}</Text></TouchableOpacity>
+          ><Text style={{...styles.buttonPositive, marginTop: styles.margins.marginSm, alignSelf:"center", 
+          backgroundColor:styles.colors.White1, color:styles.colors.Red2, width:84, fontSize:16
+          }}>{this.state.register?"Login":"Register"}</Text></TouchableOpacity>
         </View>
   );
 }

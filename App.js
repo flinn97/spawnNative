@@ -1,8 +1,13 @@
 
 import auth from './services/auth'
 import Dispatch from './view/dispatch';
-import React, {Component} from 'react';
-import ComponentListInterface from './npm/componentListInterface'
+import React, { Component, useEffect, useState, } from 'react';
+import ComponentListInterface from './npm/componentListInterface';
+import styleService from './services/styleService';
+
+import * as Font from 'expo-font';
+
+
 import {
   SafeAreaView,
   ScrollView,
@@ -15,10 +20,18 @@ import {
 } from 'react-native';
 import SignInUp from './view/signInUp'
 
+ Font.loadAsync({
+    'Regular': require('./assets/fonts/InriaSerif-Regular.ttf'),
+    'Bold': require('./assets/fonts/InriaSerif-Bold.ttf'),
+    'Light': require('./assets/fonts/InriaSerif-Light.ttf'),
+    'Italic': require('./assets/fonts/InriaSerif-Italic.ttf'),
+    'Title': require('./assets/fonts/Luminari-Regular.ttf'),
+  });
+
 
 
 class App extends Component {
-  constructor(props){
+  constructor(props) {
     super(props);
     this.dispatch=this.dispatch.bind(this);
     this.menuSlide=this.menuSlide.bind(this);
@@ -37,6 +50,7 @@ class App extends Component {
       componentList: undefined,
       currentComponent: undefined,
       myswitch: "feed",
+      styles: styleService.getstyles(),
       center:{
         display:"flex", justifyContent:"center", alignItems:"center"
       }
@@ -119,31 +133,26 @@ class App extends Component {
       }
     }
 }
+
+
 render(){
+
+
   return (
-
-    <View style={{width:"100%", height:"100%", background:"white", display:"flex", justifyContent:"center", alignItems:"center"}}>
-
-    {this.state.user?( 
-        <Dispatch menu = {this.menuSlide} app={{state:this.state, dispatch:this.dispatch}}/>
-        ):(
-          // <TouchableOpacity style={{borderWidth:1, width:50, height:20}} onPress={async ()=>{
-            
-          //   let user= await auth.login('tdavidson@spawn.com', 'dragon', this.state.componentList);
-          //   if(user){
-          //     this.setState({
-          //       user:user, email:'test@spawn.com'
-          //     })
-          //   }
-          // }}> 
-          // <Text>start</Text>
-          // </TouchableOpacity>
-        <SignInUp  app={{state:this.state, dispatch:this.dispatch}}/>
-        )}
-
-    </View>
+    <View style={{width:"100%", height:"100%", backgroundColor:"white",
+          display:"flex", justifyContent:"center",
+           alignItems:"center"}}>
+          {this.state.user?( 
+              <Dispatch menu = {this.menuSlide} app={{state:this.state, dispatch:this.dispatch}}/>
+              ):(
+               
+              <SignInUp  app={{state:this.state, dispatch:this.dispatch}}/>
+              )}
+      
+          </View>
 
 );
+       
 }
 
 };
