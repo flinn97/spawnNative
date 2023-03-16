@@ -4,6 +4,9 @@ import Dispatch from './view/dispatch';
 import React, { Component, useEffect, useState, } from 'react';
 import ComponentListInterface from './npm/componentListInterface';
 import styleService from './services/styleService';
+import spawnForms from './services/spawnForms';
+import picMap from './services/picMap';
+import navStyles from './services/navStyles';
 
 import * as Font from 'expo-font';
 
@@ -51,6 +54,9 @@ class App extends Component {
       currentComponent: undefined,
       myswitch: "feed",
       styles: styleService.getstyles(),
+      formStyles: spawnForms.getformstyles(),
+      picMap: picMap.getpicmapstyles(), 
+      navStyles: navStyles.getnavstyles(),
       center:{
         display:"flex", justifyContent:"center", alignItems:"center"
       }
@@ -62,7 +68,7 @@ class App extends Component {
     if(this.state.positionSideBar===-300){
       for(let i=-300; i<=0; i+=25){
         const delay = ms => new Promise(res => setTimeout(res, ms));
-                await delay(1);
+                await delay(.01);
         this.setState({
           positionSideBar:i,
           fog:true,          
@@ -72,7 +78,7 @@ class App extends Component {
     else{
       for(let i=0; i>=-300; i-=25){
         const delay = ms => new Promise(res => setTimeout(res, ms));
-                await delay(1);
+                await delay(.01);
         this.setState({
           positionSideBar:i,
           fog:false

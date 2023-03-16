@@ -3,16 +3,18 @@ import {
   } from 'react-native';
 
 
+// ANYTHING container or general layout UIs
+
 class styleService {
     getstyles() {
 
         let stylecolor = {
             
                 ///colors
-                colorRed: "#EF3E23",
-                colorRed2: "#A80303",
-                colorBlue: "#491778",
-                colorPurple: "#491778",
+                color1: "#EF3E23",
+                color2: "#A80303",
+                color3: "#491778",
+                color4: "#491778",
                 ///greyscales
                 colorWhite: "#FBFFFF",
                 colorBlack: "#161616",
@@ -28,8 +30,8 @@ class styleService {
 
             colors: {
             ///colors
-                Red1: stylecolor.colorRed,
-                Red2: stylecolor.colorRed2,
+                Color1: stylecolor.color1,
+                Color2: stylecolor.color2,
             ///greyscales
                 White1:stylecolor.colorWhite,
                 Black1: stylecolor.colorBlack,
@@ -39,8 +41,8 @@ class styleService {
             ///font settings
                 darkFontColor: stylecolor.colorBlack,
                 lightFontColor: stylecolor.colorDarkG,
-                linkFontColor: stylecolor.colorPurple,
-                linkVisitedColor: stylecolor.colorPurple,
+                linkFontColor: stylecolor.color4,
+                linkVisitedColor: stylecolor.color4,
             },
 
             shadows: {
@@ -65,32 +67,10 @@ class styleService {
 
             },
 
-///BUTTONS
-            buttonPositive: {
-                width: "100%",
-                backgroundColor: stylecolor.colorRed,
-                padding: 6,
-                borderRadius: 12,
-                color: stylecolor.colorWhite,
-                borderWidth:2,
-                textAlign: "center",
-                textAlignVertical: "center",
-                fontFamily: "Bold",
-                fontSize:18
-
-            },
-
-///FIELDS
-            textField: {
-                width:270, height:38, backgroundColor: stylecolor.colorWhite, borderWidth: 1, paddingLeft:2,
-             textAlignVertical:"center", marginTop: 22, 
-             borderTopColor: stylecolor.colorWhite,
-             borderRightColor: stylecolor.colorWhite,
-             borderLeftColor: stylecolor.colorWhite,
-            borderRadius:7, fontSize:16, color: stylecolor.colorDarkG, fontFamily: "Regular"
-            }
 
         }
+
+
         return styles;
     }
 }

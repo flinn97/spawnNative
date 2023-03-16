@@ -44,6 +44,7 @@ render(){
   let app=this.props.app;
   let state=app?.state;
   let styles=state.styles;
+  let formStyles= state.formStyles;
 
   return (
     
@@ -53,12 +54,12 @@ render(){
       resizeMode="contain"
       style={{width: styles.width,
        height: undefined, aspectRatio: 1.7, 
-      backgroundColor:styles.colors.Red2, alignSelf:"center",
+      backgroundColor:styles.colors.Color2, alignSelf:"center",
       
       }}
       />
       {/* <Text style={{
-      color: styles.colors.Red1, zIndex:2,
+      color: styles.colors.Color1, zIndex:2,
       fontFamily:"Title", fontSize:43, marginBottom:22,
       alignSelf:"center", textAlign: "center", resizeMode:"center",
       textAlignVertical: "center",
@@ -69,7 +70,7 @@ render(){
         
         <TextInput placeholder='  Email'
       style={{
-        ...styles.textField, alignSelf:"center",
+        ...formStyles.textField, alignSelf:"center",
          }}
         onChangeText={(text)=>{
           this.setState({
@@ -83,7 +84,7 @@ render(){
       <TextInput placeholder='  Password'
         secureTextEntry={true}
           style={{
-            ...styles.textField,
+            ...formStyles.textField,
             alignSelf:"center",}}
             onChangeText={(text)=>{
               this.setState({password:text})
@@ -93,7 +94,7 @@ render(){
           </></>
           <TouchableOpacity onPress={this.handleSubmission} 
           style={{ alignSelf:"center", }}>
-            <Text style={{...styles.buttonPositive, justifySelf:"center", fontSize:20,
+            <Text style={{...formStyles.buttonPositive, justifySelf:"center", fontSize:20,
             alignSelf:"center", marginTop:styles.margins.marginLg, width:102, 
           }}>Login</Text>
             </TouchableOpacity>

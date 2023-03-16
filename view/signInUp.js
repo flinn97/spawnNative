@@ -39,6 +39,7 @@ render(){
   let app=this.props.app;
   let state=app?.state;
   let styles=state.styles;
+  let formStyles= state.formStyles;
 
   return (
         <View
@@ -61,8 +62,8 @@ render(){
             }
             
           }}
-          ><Text style={{...styles.buttonPositive, marginTop: styles.margins.marginSm, alignSelf:"center", 
-          backgroundColor:styles.colors.White1, color:styles.colors.Red2, width:84, fontSize:16
+          ><Text style={{...formStyles.buttonPositive, marginTop: styles.margins.marginSm, alignSelf:"center", 
+          backgroundColor:styles.colors.White1, color:styles.colors.Color2, width:84, fontSize:16
           }}>{this.state.register?"Login":"Register"}</Text></TouchableOpacity>
         </View>
   );

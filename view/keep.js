@@ -29,7 +29,10 @@ export default class Keep extends Component {
   }
   getPic(c){
     let app = this.props.app;
-    let state = app.state;
+    let state=app?.state;
+  let styles=state.styles;
+  let formStyles= state.formStyles;
+    
     let pic = c;
     let arr =[]
     if(pic.getJson().picURLs!==undefined){
@@ -65,7 +68,7 @@ render(){
         <TouchableOpacity onPress={dispatch.bind(this,{myswitch:"follow"})}><Text>Follow</Text></TouchableOpacity>
         {pics.map((pic, index)=><View>
 
-        {pic.getJson().type.includes("keepmonsters")&&(
+        {pic.getJson().type.includes("keep")&&(
         <View>
           
           <TouchableOpacity onPress={()=>{
