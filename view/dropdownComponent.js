@@ -39,10 +39,12 @@ export default class DropDownComponent extends Component{
 render(){
  
   return (
-    <View style={{ zIndex:1000}}>
+    <View style={{ 
+      zIndex:1000
+      }}>
       <TouchableOpacity onPress={()=>{this.setState({showList:!this.state.showList})}} style={{borderWidth:1, width:200, height:35, display:'flex', flexDirection:'row', alignItems:"center"}} >
         <Text style={{fontSize:20, marginLeft:10}}>{this.state.currentItem===undefined?this.props.placeHolder:this.state.currentItem}</Text>
-      <Image source={downArrow} style={{position:"absolute", right:0}}/></TouchableOpacity>
+      <Image source={downArrow} style={{position:"absolute", right:0, height: 90, transform: [{ rotate: '90deg' }],}}/></TouchableOpacity>
       <View style={{position:"absolute", shadowColor: '#171717', top:35, backgroundColor:'white', width:200, 
     shadowOffset: {width: 0, height: 4},
     shadowOpacity: 0.2,

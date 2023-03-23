@@ -36,15 +36,15 @@ render(){
   
   return (
 
-    <View style={{width:"100%", height: 95 , position: "absolute", top: 25, flexDirection:"row",
-     backgroundColor:styles.colors.Color2}}>
+    <View style={{width:"108%", height:117 , position: "absolute", top: 0, flexDirection:"row", alignSelf:"flex-start",
+     backgroundColor:styles.colors.Color2, }}>
               <TouchableOpacity onPress={this.props.menu} 
-              style={{position:"absolute", width:50, height:50, right:22, zIndex:600, top: 25}}>
-                <Image style={{width:40, height:undefined, aspectRatio:1}} resizeMode="center" source={Menu1} />
+              style={{position:"absolute", width:50, height:50, right:49, zIndex:600, top: 53}}>
+                <Image style={{width:40, height:undefined, aspectRatio:1}} resizeMode="contain" source={Menu1} />
                 </TouchableOpacity>
 
-      <TouchableOpacity style={{width:"100%", height:"100%", left:-44,}} onPress={this.props.app.dispatch.bind(this, {myswitch: "feed"})}>
-        <Image resizeMode="contain"
+      <TouchableOpacity style={{width:"100%", height:"100%", left:-44, marginTop:23,}} onPress={this.props.app.dispatch.bind(this, {myswitch: "feed"})}>
+        <Image resizeMode="contain" 
       style={{width: styles.width,
        height: undefined, aspectRatio: 4.61, alignSelf:"flex-start",
       backgroundColor:styles.colors.Color2, alignSelf:"center",

@@ -29,41 +29,48 @@ class ContextMenu extends Component {
         let app=this.props.app;
         let state=app.state;
         let dispatch=app.dispatch;
+        let styles= state.styles;
 
         const backgroundStyle = {
-          backgroundColor: "white",//isDarkMode ? Colors.darker : Colors.lighter,
-          height:200,
-          marginBottom:-10,
+          backgroundColor: styles.colors.White1,//isDarkMode ? Colors.darker : Colors.lighter,
+          height:190,
+          marginBottom:-110,
           width:'100%',
           borderRadius:25,
           display:'flex',
-          alignItems:"center",
-          
+          borderWidth:2,
+          borderColor:styles.colors.Color2,
+          alignItems:'flex-start',
+          padding:styles.margins.marginMd,
           zindex:500
           
         };
         return ( 
             
                 <View style={backgroundStyle}>
-                <TouchableOpacity onPress={()=>{app.dispatch({fog:false, contextBottom:-500, context:false})}} style={{  zIndex:600, position:"absolute", right:10, top:10 }}><Image source={downArrow}/></TouchableOpacity>
-                <TouchableOpacity style={{marginTop:40}} onPress={()=>{
+                <TouchableOpacity onPress={()=>{app.dispatch({fog:false, contextBottom:-500, context:false})}} style={{  zIndex:600, position:"absolute", right:10, top:10 }}>
+                  <Image style={{position: "absolute", right: -79,  height: 33, transform: [{ rotate: '90deg' }],}} resizeMode="contain" source={downArrow}/>
+                  </TouchableOpacity>
+                <TouchableOpacity style={{fontSize:20, fontFamily:styles.fonts.fontBold, }} onPress={()=>{
                     
                     this.props.user.block({userID: this.props.content.getJson().owner, contentID: this.props.content.getJson()._id});
                     dispatch({popupSwitch:"blocked"})
 
                 }}>
-                     <Text style={{fontSize:20}}>Block </Text>
+                     <Text style={{fontSize:20, fontFamily:styles.fonts.fontBold, }}>Block </Text>
                      </TouchableOpacity>
+
                  <TouchableOpacity  style={{marginTop:20}} onPress={()=>{
                     
                     this.props.user.hide({contentID: this.props.content.getJson()._id, content: this.props.content.getJson()[this.props.name]});
                     dispatch({popupSwitch:"hide"})
 
-                }}><Text style={{fontSize:20}}>Hide</Text></TouchableOpacity>
+                }}><Text style={{fontSize:20, fontFamily:styles.fonts.fontBold, }}>Hide</Text></TouchableOpacity>
+
                 <TouchableOpacity  style={{marginTop:20}}  onPress={async ()=>{
                   this.props.user.report({userReported:this.props.reportUser, contentID: this.props.content.getJson()._id});
                   dispatch({popupSwitch:"report"})
-                }}><Text style={{fontSize:20}}>Report</Text></TouchableOpacity>
+                }}><Text style={{fontSize:20, fontFamily:styles.fonts.fontBold, }}>Report</Text></TouchableOpacity>
                
 
                     

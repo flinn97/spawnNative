@@ -1,14 +1,17 @@
 import React, { Component } from 'react';
+import auth from '../services/auth';
+
 import {
-  SafeAreaView,
-  ScrollView,
-  StatusBar,
-  Image,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  useColorScheme,
-  View,
+    Image,
+    SafeAreaView,
+    ScrollView,
+    StatusBar,
+    StyleSheet,
+    Text,
+    useColorScheme,
+    TouchableOpacity,Dimensions,
+    View,
+    
 } from 'react-native';
 
 export default class ViewMedia extends Component {
@@ -22,21 +25,23 @@ export default class ViewMedia extends Component {
     }
 
 render(){
-        let app = this.props.app;
-        let state = app?.state;
+    let app = this.props.app;
+    let state=app?.state;
+    let styles=state?.styles;
+       
         let dispatch = app?.dispatch;
         let componentList = state?.componentList;
-        let styles = state?.styles;
+        
         let s = this.props.scale? this.props.scale: 1;
         let media = Array.isArray(this.props.media)? this.props.media: [this.props.media];
 
         let mediaDisplay = {
 
 
-            1: <View style={{display:"flex", flexDirection:"row", justifyContent:"center", borderRadius: 10, alignItems:"center"}}>
+            1: <View style={{display:"flex", padding: 22, flexDirection:"row", justifyContent:"center", borderRadius: 10, alignItems:"center"}}>
               <View style={{position:"relative",  borderRadius: 10,}}>
                 {this.props.editable &&<TouchableOpacity style={ ///EXIT BUTTON
-                {color:"white", position:"absolute",cursor:"pointer", right:10, top:10}
+                {color:"black", position:"absolute",cursor:"pointer", right:10, top:10}
                 } onPress={()=>{this.props.removeMedia({content: media[0], index: 0})}}><Text>X</Text></TouchableOpacity>}
                 <Image style={{
                   width: 40*s,
@@ -50,7 +55,7 @@ render(){
                 2: <View style={{display:"flex", flexDirection:"row", justifyContent:"center", alignItems:"center", borderRadius: 10}}>
                      <View style={{position:"relative",  borderRadius:10}}>
                     {this.props.editable &&<TouchableOpacity style={ ///EXIT BUTTON
-                            {color:"white", cursor:"pointer", position:"absolute",  borderRadius: 10, right:10, top:10}
+                            {color:"black", cursor:"pointer", position:"absolute",  borderRadius: 10, right:10, top:10}
                             } onPress={()=>{this.props.removeMedia({content: media[0], index: 0})}}><Text>X</Text></TouchableOpacity>}
                     <Image style={{ 
                     width:20*s, 
@@ -61,7 +66,7 @@ render(){
                     </View>
                      <View style={{position:"relative",  borderRadius: 10,}}>
                     {this.props.editable &&<TouchableOpacity style={ ///EXIT BUTTON
-                            {color:"white", cursor:"pointer",borderRadius: 10,position:"absolute", right:10, top:10}
+                            {color:"black", cursor:"pointer",borderRadius: 10,position:"absolute", right:10, top:10}
                             } onPress={()=>{this.props.removeMedia({content: media[2], index: 1})}}><Text>X</Text></TouchableOpacity>}
                     <Image style={{ 
                         width: 20*s, 
@@ -77,7 +82,7 @@ render(){
                         3: <View style={{display:"flex", flexDirection:"row", justifyContent:"center",borderRadius: 10, alignItems:"center"}}>
                              <View style={{position:"relative",  borderRadius: 10,}}>
                             {this.props.editable &&<TouchableOpacity style={ ///EXIT BUTTON
-                            {color:"white", cursor:"pointer",position:"absolute", right:10, top:10}
+                            {color:"black", cursor:"pointer",position:"absolute", right:10, top:10}
                             } onPress={()=>{this.props.removeMedia({content: media[0], index: 0})}}><Text>X</Text></TouchableOpacity>}<Image style={{ 
                             width: 20*s, 
                                        height: 20*s,
@@ -88,7 +93,7 @@ render(){
                             <View style={{display:"flex", borderRadius: 10, flexDirection:"column"}}>
                             <View style={{position:"relative",  borderRadius: 10,}}>
                             {this.props.editable &&<TouchableOpacity style={ ///EXIT BUTTON
-                            {color:"white", borderRadius: 10, cursor:"pointer",position:"absolute", right:10, top:10}
+                            {color:"black", borderRadius: 10, cursor:"pointer",position:"absolute", right:10, top:10}
                             } onPress={()=>{this.props.removeMedia({content: media[1], index: 1})}}><Text>X</Text></TouchableOpacity>}
                             <Image style={{ 
                                width: 10*s, 
@@ -99,7 +104,7 @@ render(){
                                 </View>
                                  <View style={{position:"relative",  borderRadius: 10,}}>
                                 {this.props.editable &&<TouchableOpacity style={ ///EXIT BUTTON
-                            {color:"white", borderRadius: 10, cursor:"pointer",position:"absolute", right:10, top:10}
+                            {color:"black", borderRadius: 10, cursor:"pointer",position:"absolute", right:10, top:10}
                             } onPress={()=>{this.props.removeMedia({content: media[2], index: 2})}}><Text>X</Text></TouchableOpacity>}
                                 <Image style={{ 
                                 width: 10*s, 
@@ -117,7 +122,7 @@ render(){
                                 4: <View style={{display:"flex", borderRadius: 10, flexDirection:"row", justifyContent:"center", alignItems:"center"}}>
                                 <View style={{position:"relative",  borderRadius: 10,}}>
                                     {this.props.editable &&<TouchableOpacity style={ ///EXIT BUTTON
-                            {color:"white", cursor:"pointer",borderRadius: 10, position:"absolute", right:10, top:10}
+                            {color:"black", cursor:"pointer",borderRadius: 10, position:"absolute", right:10, top:10}
                             } onPress={()=>{this.props.removeMedia({content: media[0], index: 0})}}><Text>X</Text></TouchableOpacity>}<Image style={{ 
                                     width: 20*s, 
                                                      height: 20*s,
@@ -127,7 +132,7 @@ render(){
                                     <View style={{display:"flex", flexDirection:"column"}}>
                                     <View style={{position:"relative",  borderRadius: 10,}}>
                                     {this.props.editable &&<TouchableOpacity style={ ///EXIT BUTTON
-                            {color:"white",cursor:"pointer", borderRadius: 10, position:"absolute", right:10, top:10}
+                            {color:"black",cursor:"pointer", borderRadius: 10, position:"absolute", right:10, top:10}
                             } onPress={()=>{this.props.removeMedia({content: media[1], index: 1})}}><Text>X</Text></TouchableOpacity>}
                                     <Image style={{ 
                                        width: 10*s, 
@@ -137,7 +142,7 @@ render(){
                                         className="picture" id="pic" source={{uri:media[1]}}  /></View>
                                          <View style={{position:"relative",  borderRadius: 10,}}>
                                         {this.props.editable &&<TouchableOpacity style={ ///EXIT BUTTON
-                            {color:"white", cursor:"pointer", borderRadius: 10, position:"absolute", right:10, top:10}
+                            {color:"black", cursor:"pointer", borderRadius: 10, position:"absolute", right:10, top:10}
                             } onPress={()=>{this.props.removeMedia({content: media[2], index: 2})}}><Text>X</Text></TouchableOpacity>}
                                         <Image style={{ 
                                        width: 10*s, 
@@ -147,7 +152,7 @@ render(){
                                         className="picture" id="pic" source={{uri:media[2]}}  /></View>
                                          <View style={{position:"relative",  borderRadius: 10,}}>
                                         {this.props.editable &&<TouchableOpacity style={ ///EXIT BUTTON
-                            {color:"white", cursor:"pointer",position:"absolute", right:10, top:10}
+                            {color:"black", cursor:"pointer",position:"absolute", right:10, top:10}
                             } onPress={()=>{this.props.removeMedia({content: media[3], index: 3})}}><Text>X</Text></TouchableOpacity>}
                                         <Image style={{ 
                                         width: 10*s, 
@@ -163,7 +168,7 @@ render(){
                                             <View style={{display:"flex", borderRadius: 10, flexDirection:"row",}}>
                                             <View style={{position:"relative",  borderRadius: 10,}}>
                                             {this.props.editable &&<TouchableOpacity style={ ///EXIT BUTTON
-                            {color:"white",cursor:"pointer", borderRadius: 10, position:"absolute", right:10, top:10}
+                            {color:"black",cursor:"pointer", borderRadius: 10, position:"absolute", right:10, top:10}
                             } onPress={()=>{this.props.removeMedia({content: media[0], index: 0})}}><Text>X</Text></TouchableOpacity>}
                                                 <Image style={{ 
                                             width: 20*s, 
@@ -173,7 +178,7 @@ render(){
                                             className="picture" id="pic" source={{uri:media[0]}} /></View>
                                              <View style={{position:"relative",  borderRadius: 10,}}>
                                             {this.props.editable &&<TouchableOpacity style={ ///EXIT BUTTON
-                            {color:"white", cursor:"pointer",borderRadius: 10, position:"absolute", right:10, top:10}
+                            {color:"black", cursor:"pointer",borderRadius: 10, position:"absolute", right:10, top:10}
                             } onPress={()=>{this.props.removeMedia({content: media[1], index: 1})}}><Text>X</Text></TouchableOpacity>}
                                             <Image style={{ 
                                                  width: 20*s, 
@@ -184,7 +189,7 @@ render(){
                                             <View style={{display:"flex", flexDirection:"row"}}>
                                             <View style={{position:"relative",  borderRadius: 10,}}>
                                             {this.props.editable &&<TouchableOpacity style={ ///EXIT BUTTON
-                            {color:"white", cursor:"pointer",position:"absolute", right:10, top:10}
+                            {color:"black", cursor:"pointer",position:"absolute", right:10, top:10}
                             } onPress={()=>{this.props.removeMedia({content: media[2], index: 2})}}><Text>X</Text></TouchableOpacity>}
                                             <Image style={{ 
                                                 width: 10*s, 
@@ -194,7 +199,7 @@ render(){
                                                 className="picture" id="pic" source={{uri:media[2]}}  /></View>
                                                  <View style={{position:"relative",  borderRadius: 10,}}>
                                                 {this.props.editable &&<TouchableOpacity style={ ///EXIT BUTTON
-                            {color:"white", cursor:"pointer",position:"absolute", right:10, top:10}
+                            {color:"black", cursor:"pointer",position:"absolute", right:10, top:10}
                             } onPress={()=>{this.props.removeMedia({content: media[3], index: 3})}}><Text>X</Text></TouchableOpacity>}
                                                 <Image style={{ 
                                                 width: 10*s, 
@@ -204,7 +209,7 @@ render(){
                                                 className="picture" id="pic" source={{uri:media[3]}}  /></View>
                                                  <View style={{position:"relative",  borderRadius: 10,}}>
                                                 {this.props.editable &&<TouchableOpacity style={ ///EXIT BUTTON
-                            {color:"white",cursor:"pointer", position:"absolute", right:10, top:10}
+                            {color:"black",cursor:"pointer", position:"absolute", right:10, top:10}
                             } onPress={()=>{this.props.removeMedia({content: media[4], index: 4})}}><Text>X</Text></TouchableOpacity>}
                                                 <Image style={{ 
                                                 width: 10*s, 
@@ -220,7 +225,7 @@ render(){
                                                 <View style={{display:"flex", flexDirection:"row",}}>
                                                 <View style={{position:"relative"}}>
                                                 {this.props.editable &&<TouchableOpacity style={ ///EXIT BUTTON
-                            {color:"white", cursor:"pointer",position:"absolute", right:10, top:10}
+                            {color:"black", cursor:"pointer",position:"absolute", right:10, top:10}
                             } onPress={()=>{this.props.removeMedia({content: media[0], index: 0})}}><Text>X</Text></TouchableOpacity>}<Image style={{ 
                                                 width: 20*s, 
                                 height: 20*s,
@@ -229,7 +234,7 @@ render(){
                                                 className="picture" id="pic" source={{uri:media[0]}}  /></View>
                                                  <View style={{position:"relative"}}>
                                                 {this.props.editable &&<TouchableOpacity style={ ///EXIT BUTTON
-                            {color:"white",cursor:"pointer", position:"absolute", right:10, top:10}
+                            {color:"black",cursor:"pointer", position:"absolute", right:10, top:10}
                             } onPress={()=>{this.props.removeMedia({content: media[1], index: 1})}}><Text>X</Text></TouchableOpacity>}
                                                 <Image style={{ 
                                                      width: 20*s, 
@@ -241,7 +246,7 @@ render(){
                                                 <View style={{display:"flex", flexDirection:"row"}}>
                                                 <View style={{position:"relative"}}>
                                                 {this.props.editable &&<TouchableOpacity style={ ///EXIT BUTTON
-                            {color:"white", cursor:"pointer",position:"absolute", right:10, top:10}
+                            {color:"black", cursor:"pointer",position:"absolute", right:10, top:10}
                             } onPress={()=>{this.props.removeMedia({content: media[2], index: 2})}}><Text>X</Text></TouchableOpacity>}
                                                 <Image style={{ 
                                                     width: 10*s, 
@@ -251,7 +256,7 @@ render(){
                                                     className="picture" id="pic" source={{uri:media[2]}}  /></View>
                                                      <View style={{position:"relative"}}>
                                                     {this.props.editable &&<TouchableOpacity style={ ///EXIT BUTTON
-                            {color:"white",cursor:"pointer", position:"absolute", right:10, top:10}
+                            {color:"black",cursor:"pointer", position:"absolute", right:10, top:10}
                             } onPress={()=>{this.props.removeMedia({content: media[3], index: 3})}}><Text>X</Text></TouchableOpacity>}
                                                     <Image style={{ 
                                                     width: 10*s, 
@@ -264,10 +269,10 @@ render(){
                                                     height: 10*s,}}>
                                                         <View style={{background:"black", opacity:".5", position:"absolute", width:"100%", height:"100%", top:0, left:0}}></View>
                                                         <View style={{display:"flex", justifyContent:"center", alignItems:"center", 
-                                                        position:"absolute", width:"100%", height:"100%", top:0, left:0, color:"white"}}><Text>+ {media.length-5}</Text></View>
+                                                        position:"absolute", width:"100%", height:"100%", top:0, left:0, color:"black"}}><Text>+ {media.length-5}</Text></View>
                                                          <View style={{position:"relative"}}></View>
                                                         {this.props.editable &&<TouchableOpacity style={ ///EXIT BUTTON
-                            {color:"white",cursor:"pointer", position:"absolute", right:10, top:10}
+                            {color:"black",cursor:"pointer", position:"absolute", right:10, top:10}
                             } onPress={()=>{this.props.removeMedia({content: media[4], index: 4})}}><Text>X</Text></TouchableOpacity>}
                                                     <Image style={{ 
                                                     width:10*s, 

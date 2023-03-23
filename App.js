@@ -39,6 +39,10 @@ class App extends Component {
     this.dispatch=this.dispatch.bind(this);
     this.menuSlide=this.menuSlide.bind(this);
     this.state={
+      styles: styleService.getstyles(),
+      formStyles: spawnForms.getformstyles(),
+      picMap: picMap.getpicmapstyles(), 
+      navStyles: navStyles.getnavstyles(),
       arr:[],
       pic: undefined,
       index: 0,
@@ -53,10 +57,7 @@ class App extends Component {
       componentList: undefined,
       currentComponent: undefined,
       myswitch: "feed",
-      styles: styleService.getstyles(),
-      formStyles: spawnForms.getformstyles(),
-      picMap: picMap.getpicmapstyles(), 
-      navStyles: navStyles.getnavstyles(),
+      
       center:{
         display:"flex", justifyContent:"center", alignItems:"center"
       }
