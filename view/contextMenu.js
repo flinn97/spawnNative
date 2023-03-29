@@ -30,6 +30,7 @@ class ContextMenu extends Component {
         let state=app.state;
         let dispatch=app.dispatch;
         let styles= state.styles;
+        let formStyles= state.formStyles;
 
         const backgroundStyle = {
           backgroundColor: styles.colors.White1,//isDarkMode ? Colors.darker : Colors.lighter,
@@ -49,7 +50,7 @@ class ContextMenu extends Component {
             
                 <View style={backgroundStyle}>
                 <TouchableOpacity onPress={()=>{app.dispatch({fog:false, contextBottom:-500, context:false})}} style={{  zIndex:600, position:"absolute", right:10, top:10 }}>
-                  <Image style={{position: "absolute", right: -79,  height: 33, transform: [{ rotate: '90deg' }],}} resizeMode="contain" source={downArrow}/>
+                  <Image style={{...formStyles.buttonClose, transform: [{ rotate: '90deg' }],}} resizeMode="contain" source={downArrow}/>
                   </TouchableOpacity>
                 <TouchableOpacity style={{fontSize:20, fontFamily:styles.fonts.fontBold, }} onPress={()=>{
                     

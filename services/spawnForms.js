@@ -4,10 +4,10 @@ import styleService from './styleService';
 // ANYTHING forms, buttons, etc
 
 class FormService {
-    getformstyles() {
+    getformStyles() {
 let styles = styleService.getstyles();
 
-let formstyles ={
+let formStyles ={
 ///BUTTONS
             buttonPositive: {
                 width: "100%",
@@ -23,6 +23,24 @@ let formstyles ={
 
             },
 
+            buttonNegative: {
+                width: "100%",
+                backgroundColor: styles.colors.White1,
+                padding: 6,
+                borderRadius: 12,
+                color: styles.colors.Color2,
+                borderWidth:2,
+                textAlign: "center",
+                textAlignVertical: "center",
+                fontFamily: "Bold",
+                fontSize:18
+            },
+
+            buttonClose:
+            {
+                position: "absolute", right: -79,  height: 33,
+            },
+
 ///FIELDS
             textField: {
                 width:270, height:38, backgroundColor: styles.colors.White1, borderWidth: 1, paddingLeft:2,
@@ -36,7 +54,7 @@ let formstyles ={
         
 
         }
-        return formstyles;
+        return formStyles;
     }
 }
 

@@ -13,6 +13,7 @@ import {
   View,
   Switch
 } from 'react-native';
+import styleService from '../services/styleService';
 
 export default class DropDownComponent extends Component{
   constructor(props){
@@ -37,20 +38,27 @@ export default class DropDownComponent extends Component{
 
 
 render(){
+  let app = this.props.app;
+  let state=app.state;
+  let styles=state.styles;
+    let formStyles= state.formStyles;
  
   return (
     <View style={{ 
-      zIndex:1000
+      zIndex:100
       }}>
-      <TouchableOpacity onPress={()=>{this.setState({showList:!this.state.showList})}} style={{borderWidth:1, width:200, height:35, display:'flex', flexDirection:'row', alignItems:"center"}} >
+      <TouchableOpacity onPress={()=>{this.setState({showList:!this.state.showList})}} 
+      style={{borderWidth:0, width:"90%", borderRadius: 14, height:35, display:'flex', flexDirection:'row', alignItems:"center"}} >
         <Text style={{fontSize:20, marginLeft:10}}>{this.state.currentItem===undefined?this.props.placeHolder:this.state.currentItem}</Text>
-      <Image source={downArrow} style={{position:"absolute", right:0, height: 90, transform: [{ rotate: '90deg' }],}}/></TouchableOpacity>
-      <View style={{position:"absolute", shadowColor: '#171717', top:35, backgroundColor:'white', width:200, 
+      <Image source={downArrow} resizeMode="contain"
+      style={{...formStyles.buttonClose, transform: [{ rotate: '90deg' }],}}/>
+      </TouchableOpacity>
+      <View style={{position:"absolute", shadowColor: '#171717', top:35, backgroundColor:styles.colors.White1, width:200, 
     shadowOffset: {width: 0, height: 4},
     shadowOpacity: 0.2,
     shadowRadius: 3,}}>
       {this.state.showList&&(
-        <View style={{backgroundColor:'white', width:"100%"}}>
+        <View style={{backgroundColor:styles.colors.White1, width:"100%"}}>
           {this.state.list.map((item, index)=>
           <TouchableOpacity onPress={()=>{
             this.setState({currentItem:item, showList:false});
@@ -61,7 +69,7 @@ render(){
               
               this.props.handleChange(item)
             }
-          }} key={index}><Text style={{fontSize:20}}>{item}</Text></TouchableOpacity>
+          }} key={index}><Text style={{fontSize:20, fontFamily:styles.fonts.fontNormal }}>{item}</Text></TouchableOpacity>
           )}
         </View>
       )}

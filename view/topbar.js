@@ -43,7 +43,7 @@ render(){
                 <Image style={{width:40, height:undefined, aspectRatio:1}} resizeMode="contain" source={Menu1} />
                 </TouchableOpacity>
 
-      <TouchableOpacity style={{width:"100%", height:"100%", left:-44, marginTop:23,}} onPress={this.props.app.dispatch.bind(this, {myswitch: "feed"})}>
+      <TouchableOpacity style={{width:"100%", height:"100%", left:-44, marginTop:25,}} onPress={this.props.app.dispatch.bind(this, {myswitch: "feed"})}>
         <Image resizeMode="contain" 
       style={{width: styles.width,
        height: undefined, aspectRatio: 4.61, alignSelf:"flex-start",

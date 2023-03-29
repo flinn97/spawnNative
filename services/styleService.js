@@ -67,7 +67,7 @@ class styleService {
 
             },
 
-            likeIcon:{
+            icon2:{
                 width: 32,
                 height: undefined, aspectRatio: 1,
                 
@@ -78,6 +78,10 @@ class styleService {
                 shadowOpacity: 0.9,
                 shadowRadius: 2,
                 elevation: 2, // for Android
+            },
+
+            icon:{
+                aspectRatio:1, width:48, height:undefined,
             },
 
 

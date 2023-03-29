@@ -7,7 +7,7 @@ import styleService from './services/styleService';
 import spawnForms from './services/spawnForms';
 import picMap from './services/picMap';
 import navStyles from './services/navStyles';
-
+import { changeNavigationBarColor, hideNavigationBar, showNavigationBar } from 'react-native-navigation-bar-color';
 import * as Font from 'expo-font';
 
 
@@ -21,7 +21,10 @@ import {
   useColorScheme,
   View,
 } from 'react-native';
-import SignInUp from './view/signInUp'
+import SignInUp from './view/signInUp';
+
+
+
 
  Font.loadAsync({
     'Regular': require('./assets/fonts/InriaSerif-Regular.ttf'),
@@ -40,7 +43,7 @@ class App extends Component {
     this.menuSlide=this.menuSlide.bind(this);
     this.state={
       styles: styleService.getstyles(),
-      formStyles: spawnForms.getformstyles(),
+      formStyles: spawnForms.getformStyles(),
       picMap: picMap.getpicmapstyles(), 
       navStyles: navStyles.getnavstyles(),
       arr:[],
@@ -64,6 +67,7 @@ class App extends Component {
 
     };
   }
+
   async menuSlide(){
     
     if(this.state.positionSideBar===-300){
@@ -163,7 +167,5 @@ render(){
 }
 
 };
-
-
 
 export default App;

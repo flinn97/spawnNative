@@ -8,7 +8,7 @@ import {
   StatusBar,
   Image,
   StyleSheet,
-  Text,
+  Text, TextInput,
   TouchableOpacity,
   useColorScheme,
   View,
@@ -26,6 +26,8 @@ import {
 // import SelectFileComponent from './selectFileComponent';
 import DropDownComponent from './dropdownComponent';
 import InputComponent from './inputComponent';
+import styleService from '../services/styleService';
+import styleForms from '../services/spawnForms';
 export default class Createspawns extends Component{
   
   constructor(props){
@@ -40,7 +42,7 @@ export default class Createspawns extends Component{
           percent: "",
           currentPic: undefined,
           blob: undefined,
-          loading:"Save",
+          loading:"Create Spawn",
           paths: [],
           newPics:[],
           list:[],
@@ -144,7 +146,7 @@ componentDidMount() {
   createUUID() {
     // http://www.ietf.org/rfc/rfc4122.txt
     var s = [];
-    var hexDigits = "0123456789abcdef";
+    var hexDigits = "0123456789abcdefhklmnopqrstvwxyz";
     for (var i = 0; i < 36; i++) {
         s[i] = hexDigits.substring(Math.floor(Math.random() * 0x10), 1);
     }
@@ -183,32 +185,35 @@ render(){
   let app = this.props.app;
   let state=app.state;
   let dispatch= app.dispatch;
-  
+   let styles= state.styles;
+   let formStyles= state.formStyles;
 
 
   // const isDarkMode = useColorScheme() === 'dark';
   const backgroundStyle = {
-    backgroundColor: "white",//isDarkMode ? Colors.darker : Colors.lighter,
+    backgroundColor: styles.colors.White1,//isDarkMode ? Colors.darker : Colors.lighter,
     height:"100%",
-    
+    borderRadius: 22,
+    borderWidth:1,
     width:'100%',
     display:'flex',
     alignItems:"center",
     
     position:'absolute',
-    top:60,
+    top:120,
     zIndex:1000
     
     
   };
  
   return (
+    
     <View style={backgroundStyle}>
       
-      <TouchableOpacity onPress={()=>{this.props.app.dispatch({myswitch:"feed"})}} style={{position:'absolute', top:30, right:30, zIndex:1003}}><Text>X</Text></TouchableOpacity>
-    <View  style={{ position:'absolute', width:'100%', height:'100%', backgroundColor:'grey', opacity:.7, zIndex:1001 }}>
+      <TouchableOpacity onPress={()=>{this.props.app.dispatch({myswitch:"feed"})}} style={{position:'absolute', top:30, right:30, zIndex:1003}}><Text style={{...formStyles.buttonClose, fontFamily: styles.fonts.fontBold, top:-14, right:-11, fontSize:26, color:styles.colors.Color2}}>X</Text></TouchableOpacity>
+    <View  style={{ position:'absolute', borderRadius: 22, width:'100%', height:'100%', backgroundColor:styles.colors.White1, padding:2, opacity:.7, zIndex:1001 }}>
  </View>
- <View style={{width:'90%', height:'85%', marginTop:20, backgroundColor:"white", zIndex:1002, display:'flex', alignItems:'center', paddingTop:75}}>
+ <View style={{ alignContent: "center", width:'100%', height:'87%', marginTop:20, backgroundColor:"white", zIndex:1002, display:'flex', alignItems:'center', paddingTop:7, borderRadius:22}}>
  <ViewMedia scale={3} removeMedia={(obj)=>{
   let list= [...this.state.list];
   let delList=[...this.state.delList];
@@ -218,11 +223,15 @@ render(){
  }} editable={true} media={[...this.state.list]} />
  {/* {this.state.currentPic&&(<Image  source={{uri:this.state.currentPic}} style={{width:200, height:200,}}/>)} */}
   {/* <SelectFileComponent setPic={this.setPic} app={this.props.app} /> */}
+  <Text style={{fontFamily: styles.fonts.fontBold, fontSize:15}}>Type</Text>
   <DropDownComponent list={['monsters', 'heroes', 'worlds', 'maps', 'statblocks']} obj={state.currentComponent} name="type" app={app} />
-  <InputComponent obj={state.currentComponent} name="name" app={app} />
-  <InputComponent obj={state.currentComponent} name="destinationURL" app={app} />
-   {this.state.loaded.includes('Pic')&&(<Text>Picture Uploaded</Text>)}<TouchableOpacity onPress={this.handleSubmission} style={{position:"absolute", bottom:0, width:75, height:30, backgroundColor:'#6C86F4', borderRadius:25, display:'flex', alignItems:'center', justifyContent:"center", marginTop:20, marginBottom:20}}>
-    <Text style={{color:'white'}}>{this.state.loading}</Text></TouchableOpacity>
+  <View style={{display:"flex",direction:"row", width:"80%", alignItems:"flex-start"}}><Text style={{fontFamily: styles.fonts.fontBold, fontSize:15}}>Title</Text>
+      <TextInput obj={state.currentComponent} name="name" app={app} style={{...formStyles.textField}}/></View>
+  <View style={{display:"flex",direction:"row", width:"80%", alignItems:"flex-start"}}><Text style={{fontFamily: styles.fonts.fontBold, fontSize:15}}>URL</Text>
+      <TextInput obj={state.currentComponent} name="destinationURL" app={app} style={{...formStyles.textField}}/></View>
+   {this.state.loaded.includes('Pic')&&(<Text>Picture Uploaded</Text>)}
+   <TouchableOpacity onPress={this.handleSubmission} style={{padding:2, position:"absolute", bottom:20, width:225, height:70,}}>
+    <Text style={{...formStyles.buttonPositive, color:styles.colors.White1}}>{this.state.loading}</Text></TouchableOpacity>
  </View>
  </View>
 

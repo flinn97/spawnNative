@@ -114,7 +114,7 @@ render(){
        fontFamily: styles.fonts.fontBold, fontSize:20,
                        backgroundColor: "", marginRight: -5, 
           }}>{c.getJson().keep} </Text>
-       <Image source={Keep}  resizeMode="contain" style={{...styles.likeIcon, }} />
+       <Image source={Keep}  resizeMode="contain" style={{...styles.icon2, }} />
        </TouchableOpacity>
 
 
@@ -122,7 +122,7 @@ render(){
            <Text style={{fontFamily: styles.fonts.fontBold,
                          backgroundColor: "", fontSize:20,
           }}>{c.getJson().like} </Text>
-           <Image source={LikeHeart} resizeMode="contain" style={{...styles.likeIcon}} />
+           <Image source={LikeHeart} resizeMode="contain" style={{...styles.icon2}} />
            </TouchableOpacity>
 
            <TouchableOpacity

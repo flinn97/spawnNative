@@ -61,11 +61,13 @@ render(){
     let dispatch = app.dispatch;
     let state = app.state;
     let styles =state.styles;
+    let formStyles= state.formStyles;
   return (
 
-    <SafeAreaView style={{width:"100%", height:"60%", background:"white", display:"flex", justifyContent:"center", alignItems:"center", marginTop:70}}>
-      <ScrollView>
-        <TouchableOpacity onPress={dispatch.bind(this,{myswitch:"follow"})}><Text>Follow</Text></TouchableOpacity>
+    <SafeAreaView style={{width:700, height:"70%", background:styles.colors.White1, 
+    display:"flex", justifyContent:"center", alignItems:"center", marginTop:7}}>
+      <ScrollView style={{width:styles.width}}>
+        <TouchableOpacity onPress={dispatch.bind(this,{myswitch:"follow"})}><Text style={{...formStyles.buttonPositive, width:88, marginLeft: styles.margins.marginSm}}>Follow</Text></TouchableOpacity>
         {pics.map((pic, index)=><View>
 
         {pic.getJson().type.includes("keep")&&(
