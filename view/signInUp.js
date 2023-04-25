@@ -40,20 +40,22 @@ render(){
   let state=app?.state;
   let styles=state.styles;
   let formStyles= state.formStyles;
-
   return (
         <View
         style={{
           flexDirection: 'column',
           justifyContent: 'center',
           alignItems: 'center',
+          width:"100%"
         }}>
-          {this.state.register?(<Register app={app}/>):(<Login app={app}/>)}
+          {this.state.register?(<>{state?.currentComponent?.getJson()?.type==="user"&&(<Register app={app}/>)}</>):(<Login app={app}/>)}
           <TouchableOpacity
-          onPress={()=>{
+          onPress={async ()=>{
             if(!this.state.register){
-              app.dispatch({operate:"adduser", operatation:"cleanPrepare", object:undefined});
-              this.setState({register:true})
+              await state.opps.cleanPrepare({adduser:1});
+              let user = state.opps.getUpdater("add")[0];
+              this.setState({register:true, })
+              app.dispatch({currentComponent:user})
             }
             else{
               this.setState({
@@ -63,7 +65,7 @@ render(){
             
           }}
           ><Text style={{...formStyles.buttonPositive, marginTop: styles.margins.marginSm, alignSelf:"center", 
-          backgroundColor:styles.colors.White1, color:styles.colors.Color2, width:84, fontSize:16
+          backgroundColor:styles.colors.White1, color:styles.colors.Color2, width:102, fontSize:16
           }}>{this.state.register?"Login":"Register"}</Text></TouchableOpacity>
         </View>
   );

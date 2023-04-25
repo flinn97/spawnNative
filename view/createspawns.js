@@ -5,6 +5,7 @@ import auth from '../services/auth';
 import {
   SafeAreaView,
   ScrollView,
+  Linking,
   StatusBar,
   Image,
   StyleSheet,
@@ -28,6 +29,7 @@ import DropDownComponent from './dropdownComponent';
 import InputComponent from './inputComponent';
 import styleService from '../services/styleService';
 import styleForms from '../services/spawnForms';
+import SelectFileComponent from './selectFileComponent';
 export default class Createspawns extends Component{
   
   constructor(props){
@@ -49,20 +51,29 @@ export default class Createspawns extends Component{
           
           loaded: "",
           name: "",
-          type: ""
+          type: "",
+          picMessage:""
           
 
     }
   }
 
   async setPic(pic, blob){
-    
+    if(pic ===false){
+      this.setState({picMessage:"Your image needs to be smaller than 2000kb or you need to upload this image on the "})
+      return
+    }
+    else{
+      this.setState({picMessage:""})
+
+    }
     await this.setState({
       currentPic:pic,
       blob:blob,
     })
     this.changeHandler();
   }
+
   changeHandler = async () => {
     if(this.state.list.length<5){
     
@@ -70,10 +81,10 @@ export default class Createspawns extends Component{
     let paths = [...this.state.paths];
     let oldList=[...this.state.list, this.state.currentPic];
 
-   
+    
                 var fileOfBlob = this.state.blob;
                 let path= "media/" + this.createUUID();
-                // let path = "media/" +fileOfBlob.name;
+              
                 list.push(fileOfBlob);
                 paths.push(path);
                 this.setState({newPics:list, paths:paths, list:oldList, showPics:true});
@@ -83,7 +94,7 @@ export default class Createspawns extends Component{
 };
 async handleSubmission()  {
     
-    await this.setState({loading:true});
+    await this.setState({loading:"loading..."});
     let list = [...this.state.newPics];
     for(const key in list){
         await auth.uploadPics(list[key], this.state.paths[key]);
@@ -110,9 +121,11 @@ async handleSubmission()  {
     
 
 
-
+    if(component.getJson().type===""){
+      component.setJson({...component.getJson(), type:"monsters"})
+    }
     await component.getOperationsFactory().run();
-    await this.setState({loading:false});
+    await this.setState({loading:"...loading"});
 
 
     this.props.app.dispatch({ myswitch: "feed", pic: component, newSpawn: false, switchcase:component.getJson().type })
@@ -158,28 +171,57 @@ componentDidMount() {
     return uuid;
 }
 
-//   async handleSubmission()  {
-//     await this.setState({loading:"loading..."});
+async handleSubmission()  {
+  let component = this.props.app.state.currentComponent
+  if(this.state.newPics.length===0 && this.state.list.length===0){
+      this.setState({message:"You still need to Spawn something! Upload an image."})
+      return
+  }
 
-//     let app=this.props.app;
-//   let state=app.state;
+  if(component.getJson().type==="" || component.getJson().type===undefined) {
+      this.setState({message:"You need a type for your Spawn."})
+      return
+  }
 
-//     await auth.uploadPics(this.state.blob, this.state.path);
-//     state.currentComponent.setJson({...state.currentComponent.getJson(), picURL: this.state.currentPic});
-//     await state.currentComponent.getPicSrc(this.state.path).then(async ()=>{
-//       await this.props.app.dispatch({operation:"cleanPrepareRun", object: state.currentComponent, operate:state.update?"update":"add", update:false});
-//       this.setState({
-//         loaded:"Picture Uploaded",
-//         loading: "Save"
-//       })
+  
+  await this.setState({loading:"...loading"});
+  let list = [...this.state.newPics];
+  for(const key in list){
+      await auth.uploadPics(list[key], this.state.paths[key]);
 
-//     })
-    
-    
-//     // this.props.app.dispatch({myswitch:"feed"})
+  }
+ 
 
-// };
+  
+  component.setJson({...component.getJson(), owner:this.props.app.state.user.getJson()._id})
+  await component.getPicSrc([...this.state.paths]);
 
+  // if(this.props.app.state.uploadKey==="update"){
+  //     let li = Object.values(component.getJson().picURLs);
+  //     let obj={}
+  //     for(const key in li){
+  //         if(!this.state.delList.includes(li[key])){
+  //             obj["media"+component.createUUID(3)]= li[key];
+
+  //         }
+  //     }
+  //     component.setJson({...component.getJson(), picURLs:obj})
+  // }
+  
+
+
+
+  await component.getOperationsFactory().run();
+  this.props.app.dispatch({myswitch:"myspawns", })
+  await this.setState({loading:"loading..."});
+
+
+  // this.props.app.dispatch({ myswitch: "feed", pic: componentSea , newSpawn: false, switchcase:component.getJson().type })
+  
+  
+  
+
+};
 
 render(){
   let app = this.props.app;
@@ -205,12 +247,13 @@ render(){
     
     
   };
- 
+  let obj = state.currentComponent
   return (
     
     <View style={backgroundStyle}>
       
-      <TouchableOpacity onPress={()=>{this.props.app.dispatch({myswitch:"feed"})}} style={{position:'absolute', top:30, right:30, zIndex:1003}}><Text style={{...formStyles.buttonClose, fontFamily: styles.fonts.fontBold, top:-14, right:-11, fontSize:26, color:styles.colors.Color2}}>X</Text></TouchableOpacity>
+      <TouchableOpacity onPress={()=>{this.props.app.dispatch({myswitch:"myspawns"})}} style={{position:'absolute', top:30, right:30, zIndex:1003}}><Text style={{...formStyles.buttonClose, fontFamily: styles.fonts.fontBold, top:-14, right:-11, fontSize:26, color:styles.colors.Color2}}>X</Text></TouchableOpacity>
+    
     <View  style={{ position:'absolute', borderRadius: 22, width:'100%', height:'100%', backgroundColor:styles.colors.White1, padding:2, opacity:.7, zIndex:1001 }}>
  </View>
  <View style={{ alignContent: "center", width:'100%', height:'87%', marginTop:20, backgroundColor:"white", zIndex:1002, display:'flex', alignItems:'center', paddingTop:7, borderRadius:22}}>
@@ -221,17 +264,53 @@ render(){
   list.splice(obj.index, 1);
   this.setState({list:list, delList});
  }} editable={true} media={[...this.state.list]} />
- {/* {this.state.currentPic&&(<Image  source={{uri:this.state.currentPic}} style={{width:200, height:200,}}/>)} */}
-  {/* <SelectFileComponent setPic={this.setPic} app={this.props.app} /> */}
-  <Text style={{fontFamily: styles.fonts.fontBold, fontSize:15}}>Type</Text>
-  <DropDownComponent list={['monsters', 'heroes', 'worlds', 'maps', 'statblocks']} obj={state.currentComponent} name="type" app={app} />
-  <View style={{display:"flex",direction:"row", width:"80%", alignItems:"flex-start"}}><Text style={{fontFamily: styles.fonts.fontBold, fontSize:15}}>Title</Text>
-      <TextInput obj={state.currentComponent} name="name" app={app} style={{...formStyles.textField}}/></View>
-  <View style={{display:"flex",direction:"row", width:"80%", alignItems:"flex-start"}}><Text style={{fontFamily: styles.fonts.fontBold, fontSize:15}}>URL</Text>
-      <TextInput obj={state.currentComponent} name="destinationURL" app={app} style={{...formStyles.textField}}/></View>
-   {this.state.loaded.includes('Pic')&&(<Text>Picture Uploaded</Text>)}
-   <TouchableOpacity onPress={this.handleSubmission} style={{padding:2, position:"absolute", bottom:20, width:225, height:70,}}>
-    <Text style={{...formStyles.buttonPositive, color:styles.colors.White1}}>{this.state.loading}</Text></TouchableOpacity>
+  <SelectFileComponent setPic={this.setPic} app={this.props.app} />
+  {this.state.picMessage!=="" &&(<View style={{display:'flex', flexDirection:"row", width:350, alignSelf:'center'}}>
+    <Text style={{color:'red', fontFamily: "Regular"}}>{this.state.picMessage} <TouchableOpacity style={{margin:0, marginBottom:-3}} onPress={async ()=>{
+                let url = "https://app.spawnrpg.com";
+                
+                const supported = await Linking.canOpenURL(url);
+                if (supported) {
+                  await Linking.openURL(url);
+                }
+               }}>
+                <Text style={{color:"red", textDecorationLine:"underline", fontFamily: "Regular"}}>browser.</Text>
+               </TouchableOpacity></Text>
+    
+               </View>)}
+  <View style={{display:"flex",direction:"row", width:"80%", alignItems:"flex-start", marginBottom:20}}>
+      <InputComponent placeholder="Title"  obj={obj} name="name" app={app} {...formStyles.textField}/></View>
+  <View style={{display:"flex",direction:"row", width:"80%", alignItems:"flex-start", marginBottom:20}}>
+      <InputComponent multiline={true} setPosition={()=>{
+        if(state.keyboardMargin===0){
+          app.dispatch({keyboardPosition:'absolute', keyboardMargin:400})
+        }
+        }}
+        setOnDefocus={()=>{
+          if(state.keyboardMargin===400){
+            app.dispatch({keyboardPosition:'auto', keyboardMargin:0})          }
+          }} 
+        numberOfLines={4}  returnKeyType="Done" obj={obj} name="description" placeholder="Description"  app={app} width={270} height={100} fontFamily= "Regular" fontSize={16} paddingLeft={5}/></View>
+      <View style={{display:"flex",direction:"row", width:"80%", alignItems:"flex-start", zIndex:190}}>
+      <Text style={{fontFamily: styles.fonts.fontBold, fontSize:15, marginBottom:5, fontFamily: "Regular"}}>Type</Text>
+      <View style={{borderWidth:1, width:270, borderRadius:7, marginBottom:20}}>
+  <DropDownComponent list={['monsters', 'heroes', 'worlds', 'maps', 'statblocks']} obj={obj} name="type" app={app} />
+  </View>
+  </View>
+   
+    <View style={{display:"flex",direction:"row", width:"80%", alignItems:"flex-start"}}>
+      <InputComponent setPosition={()=>{
+        if(state.keyboardMargin===0){
+          app.dispatch({keyboardPosition:'absolute', keyboardMargin:400})
+        }
+        }}
+        setOnDefocus={()=>{
+          if(state.keyboardMargin===400){
+            app.dispatch({keyboardPosition:'auto', keyboardMargin:0})          }
+          }} obj={obj} name="destinationURL" app={app} {...formStyles.textField} placeholder="Link"/></View>
+
+<TouchableOpacity onPress={this.handleSubmission} style={{padding:2, position:"absolute", bottom:70, width:225, height:40,backgroundColor:'#A80303', borderRadius:7, display:"flex", justifyContent:'center', alignItems:'center'}}>
+    <Text style={{color:styles.colors.White1, fontSize:20, fontFamily: "Regular"}}>{this.state.loading}</Text></TouchableOpacity>
  </View>
  </View>
 

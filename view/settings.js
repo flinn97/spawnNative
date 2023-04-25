@@ -26,7 +26,7 @@ render(){
   return (
 
     <View style={{width:"100%", height:"100%", background:"white", display:"flex", justifyContent:"center", alignItems:"center"}}>
-        <Text>hi</Text>
+        <Text></Text>
     </View>
 
 );

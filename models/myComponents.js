@@ -3,6 +3,7 @@ import auth from "../services/auth";
 class BaseObject extends BaseClass{
     constructor(operationsFactory){
         super(operationsFactory);
+        this.createUUID=this.createUUID.bind(this);
     }
     json;
     starting={
@@ -11,8 +12,22 @@ class BaseObject extends BaseClass{
         _id: "",
     }
 
-
+    createUUID() {
+        // http://www.ietf.org/rfc/rfc4122.txt
+        var s = [];
+        var hexDigits = "0123456789abcdefhklmnopqrstvwxyz";
+        for (var i = 0; i < 36; i++) {
+            s[i] = hexDigits.substring(Math.floor(Math.random() * 0x10), 1);
+        }
+        s[14] = "4";  // bits 12-15 of the time_hi_and_version field to 0010
+        s[19] = hexDigits.substring((s[19] & 0x3) | 0x8, 1);  // bits 6-7 of the clock_seq_hi_and_reserved to 01
+        s[8] = s[13] = s[18] = s[23] = "-";
+    
+        var uuid = s.join("");
+        return uuid;
+    }
 }
+
 
 class Pic extends BaseObject{
     constructor(operationsFactory){
@@ -31,32 +46,44 @@ class Pic extends BaseObject{
         note: "",
         keepers: {},
         like: 0,
+        picURLS: {},
         likers: {},
+        type:"monsters",
         destinationURL: ""
         
     }
 
-    async getPicSrc(name){
-        let pic = await auth.downloadPics(name);
-        this.json.picURL = pic
+    async getPicSrc(path){
+        let obj={}
+        for(const key in path){
+            let pic = await auth.downloadPics(path[key]);
+            obj["media"+this.createUUID(3)]= pic;
+        }
+        obj = {...obj, ...this.json.picURLs}
+
+        
+        this.json.picURLs = obj
         
     }
    async keep(user){
+        if(!Object.keys(this.json.keepers).includes(user.getJson()._id) && this.json.owner.toString()!==user.getJson()._id.toString()){
+            this.json.keep= this.json.keep+1;
+            let userjson = user.getJson();
+            let id = (Math.random(Date.now())+Date.now()+performance.now()).toString();
+            let picobj = {...this.json, owner: userjson._id, ogref: this.json._id,type: "keep" + this.json.type, pic: false, _id: id, ogOwner:user.getJson()._id}
+            this.json.keepers[user.getJson()._id] = user.getJson().name
+            
+            await this.operationsFactory.jsonPrepareRun({["add" + picobj.type]: picobj}) 
+            await this.operationsFactory.cleanPrepareRun({"update" : this});
+        }
         
-        this.json.keep= this.json.keep+1;
-        let userjson = user.getJson();
-        let id = (Math.random(Date.now())+Date.now()+performance.now()).toString();
-        let picobj = {...this.json, owner: userjson._id, ogref: this.json._id,type: "keep" + this.json.type, pic: false, _id: id}
-        this.json.keepers[user.getJson()._id] = user.getJson().name
-        
-        await this.operationsFactory.jsonPrepareRun({["add" + picobj.type]: picobj}) 
-        await this.operationsFactory.cleanPrepareRun({"update" : this});
     }
     async like(user){
-        
+        if(!Object.keys(this.json.likers).includes(user.getJson()._id) && this.json.owner.toString()!==user.getJson()._id.toString()){
         this.json.like= this.json.like+1;
         this.json.likers[user.getJson()._id] = user.getJson().name
         await this.operationsFactory.cleanPrepareRun({"update" : this}) 
+        }
     }
 }
 
@@ -75,6 +102,7 @@ class User extends BaseObject{
         type: "user",
         owner: "",
         keeps:[],
+        EULA:false,
         firstName:"",
         lastName:"",
         spawnerHandle:"",
@@ -108,10 +136,14 @@ class User extends BaseObject{
         return pic;
     }
     async follow(picOwner){
-        let userFJson = {owner: this.json._id, following: true, name: picOwner.getJson().name, followID:picOwner.getJson()._id };
-        let picOwnerFJson = {owner: picOwner.getJson()._id , name:this.json.name, followID: this.json._id };
+        // if(picOwner.getJson()._id===this.json._id){
+        //     return;
+        // }
+        let userFJson = {owner: this.json._id, following: true, name: picOwner.getJson().name, spawnerHandle:picOwner.getJson().name, followID:picOwner.getJson()._id };
+        let picOwnerFJson = {owner: picOwner.getJson()._id , name:this.json.name, followID: this.json._id, spawnerHandle:this.json._id, picURL: picOwner.getJson().picURL };
         
         this.operationsFactory.cleanJsonPrepareRun({addfollow:[userFJson, picOwnerFJson]});
+
     }
 }
 
@@ -132,8 +164,10 @@ class Follow extends BaseObject{
     }
     async unFollow(componentList){
         
-        let follow = await auth.getFollower(componentList, this.json.owner)
-        
+        let follow = await auth.getFollower(componentList, this.json.owner);
+
+        follow = follow.filter(obj=>{return obj.getJson().owner===this.json.followID})
+        follow = follow[0];
         this.operationsFactory.cleanPrepareRun({del: [this, follow]})
     }
 }

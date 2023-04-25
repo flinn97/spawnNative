@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import auth from '../services/auth';
 
+
 import {
     Image,
     SafeAreaView,
@@ -15,7 +16,7 @@ import {
 } from 'react-native';
 
 export default class ViewMedia extends Component {
-    constructor(props){
+    constructor(props){ 
         super(props);
   
 
@@ -287,7 +288,7 @@ render(){
 
         }
         return(
-            <View onPress={(e)=>{
+            <View style ={{}} onPress={(e)=>{
                 this.props.onPress(e, this.props);
             }}>
                 {mediaDisplay[media.length>5? 6: media.length]}

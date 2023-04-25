@@ -1,3 +1,5 @@
+import auth from "../services/auth";
+
 export default class Opps {
     components=[];
     dispatch;
@@ -13,12 +15,15 @@ export default class Opps {
         this.del=this.del.bind(this);
         this.getComponents=this.getComponents.bind(this);
         this.getComponent=this.getComponent.bind(this);
-
+        this.setSelectedList=this.setSelectedList.bind(this);
         this.getOperationsFactory=this.getOperationsFactory.bind(this);
         this.componentListInterface=componentListInterface;
         this.operationsFactory=componentListInterface.getOperationsFactory();
+        this.check=this.check.bind(this);
         this.operationsFactory.setRegister(this.register);
+        this.setComponents=this.setComponents.bind(this);
         this.dispatch=componentListInterface.dispatch;
+        
     }
     getComponents(){
         return this.components
@@ -76,22 +81,73 @@ export default class Opps {
         await this.setComponentsList();
         return backArr;
     }
-
+    async setComponents(components){
+        this.components=[...components];
+        this.setComponentsList();
+    }
+    
     async addComponents(arr, backend){
         this.backend=backend;
         let prep = []
+        
+
         for(const key in arr){
+           
+            let bool = this.check(arr[key]);
+            if(bool){
+                
+                let comp = await this.componentListInterface.getFactory().getComponent({component:arr[key].type, json: arr[key]});
+                if(comp){
+                    prep.push(comp);
+
+                }
+            }
+            else{
+                let comp = this.getComponent(arr[key].type, arr[key]._id, "_id");
+                comp.setJson(arr[key]);
+            }
             
-            let comp = this.componentListInterface.getFactory().getComponent({component:arr[key].type, json: arr[key]});
-            prep.push(comp);
         }
-        this.components= [...this.components, ...prep];
+        let arr1 = [...this.components, ...prep]
+
+        this.components= [...arr1];
         await this.setComponentsList();
         if(this.backend){
             this.dispatch({backend: true, backendUpdate:prep });
         }
         this.backArray=true;
     } 
+    
+    check(obj){
+
+        let check = this.getComponent(obj.type.toString(), obj._id.toString(), "_id");
+
+        let continue1 =true;
+        if(check){
+            let c = check.getJson();
+            if(Object.keys(c).length !== Object.keys(obj)){
+                continue1 = false;
+            }
+            else if(Object.keys(c).length === Object.keys(obj)){
+                for(const key in Object.keys(c)){
+                    if(Object.keys(c)[key]!==Object.keys(obj)[key]){
+                        continue1 = false;
+                    }
+                }
+            }
+            
+            else{
+                for(const key in c){
+                    if(c[key]!==obj[key]){
+                        continue1=false;
+                    }
+                }
+            }
+            
+        }
+        return continue1;
+    } 
+    
     
 
     getOperationsFactory(){
@@ -130,6 +186,7 @@ export default class Opps {
         return temp;
     }
     getComponent(list, id, filterKey, ){
+
         let temp = [];
         if(this.componentsList[list]!==undefined){
             temp = [...this.componentsList[list]];
@@ -138,6 +195,9 @@ export default class Opps {
             let key = filterKey!==undefined ? filterKey: "owner"
             temp = temp.filter(data => data.getJson()[key] === id);
         }
+
+
+        
         return temp[0];
     }
 
@@ -193,6 +253,10 @@ export default class Opps {
        
         this.components= [...arr];
         this.setComponentsList(); 
+    }
+    setSelectedList(type, list){
+        this.componentsList[type] = list;
+       
     }
 
     

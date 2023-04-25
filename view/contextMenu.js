@@ -17,11 +17,27 @@ import {
 class ContextMenu extends Component {
     constructor(props) {
         super(props);
-
+      this.setSelectedList=this.setSelectedList.bind(this)
         this.state = {
         }
 
     };
+    setSelectedList(){
+      let app = this.props.app;
+      let state= app.state;
+      let list = state.componentList;
+      let components = list.getComponents();
+      let newList = [];
+      let user = state.user
+      newList = components.filter(obj => {
+        return !Object.keys(user.getJson().blocked).includes(obj.getJson().owner)
+      })
+      newList = newList.filter(obj => {
+        return !Object.keys(user.getJson().hidden).includes(obj.getJson()._id)
+      })
+      list.setComponents(newList);
+      app.dispatch({});
+    }
  
     
 
@@ -35,7 +51,7 @@ class ContextMenu extends Component {
         const backgroundStyle = {
           backgroundColor: styles.colors.White1,//isDarkMode ? Colors.darker : Colors.lighter,
           height:190,
-          marginBottom:-110,
+          // marginBottom:-110,
           width:'100%',
           borderRadius:25,
           display:'flex',
@@ -49,29 +65,38 @@ class ContextMenu extends Component {
         return ( 
             
                 <View style={backgroundStyle}>
-                <TouchableOpacity onPress={()=>{app.dispatch({fog:false, contextBottom:-500, context:false})}} style={{  zIndex:600, position:"absolute", right:10, top:10 }}>
+                <TouchableOpacity onPress={()=>{
+                  app.dispatch({contextContent:undefined, reportUser: undefined, context: false});
+                 }} style={{  zIndex:600, position:"absolute", right:10, top:10 }}>
                   <Image style={{...formStyles.buttonClose, transform: [{ rotate: '90deg' }],}} resizeMode="contain" source={downArrow}/>
                   </TouchableOpacity>
-                <TouchableOpacity style={{fontSize:20, fontFamily:styles.fonts.fontBold, }} onPress={()=>{
+                <TouchableOpacity style={{fontSize:20, fontFamily:styles.fonts.fontBold, }} onPress={async()=>{
                     
                     this.props.user.block({userID: this.props.content.getJson().owner, contentID: this.props.content.getJson()._id});
-                    dispatch({popupSwitch:"blocked"})
+                     this.setSelectedList();
+                    dispatch({popupSwitch:"blocked"});
+                    app.dispatch({contextContent:undefined, reportUser: undefined, context: false});
 
                 }}>
-                     <Text style={{fontSize:20, fontFamily:styles.fonts.fontBold, }}>Block </Text>
+                     <Text style={{fontSize:20, fontFamily:styles.fonts.fontBold, fontFamily: "Regular" }}>Block </Text>
                      </TouchableOpacity>
 
-                 <TouchableOpacity  style={{marginTop:20}} onPress={()=>{
+                 <TouchableOpacity  style={{marginTop:20}} onPress={async ()=>{
                     
-                    this.props.user.hide({contentID: this.props.content.getJson()._id, content: this.props.content.getJson()[this.props.name]});
+                    await this.props.user.hide({contentID: this.props.content.getJson()._id, content: this.props.content.getJson()[this.props.name]});
+                    this.setSelectedList();
                     dispatch({popupSwitch:"hide"})
+                    app.dispatch({contextContent:undefined, reportUser: undefined, context: false});
+                    
 
-                }}><Text style={{fontSize:20, fontFamily:styles.fonts.fontBold, }}>Hide</Text></TouchableOpacity>
+                }}><Text style={{fontSize:20, fontFamily:styles.fonts.fontBold, fontFamily: "Regular" }}>Hide</Text></TouchableOpacity>
 
                 <TouchableOpacity  style={{marginTop:20}}  onPress={async ()=>{
-                  this.props.user.report({userReported:this.props.reportUser, contentID: this.props.content.getJson()._id});
+                 await  this.props.user.report({userReported:this.props.reportUser, contentID: this.props.content.getJson()._id});
+                 this.setSelectedList();
                   dispatch({popupSwitch:"report"})
-                }}><Text style={{fontSize:20, fontFamily:styles.fonts.fontBold, }}>Report</Text></TouchableOpacity>
+                  app.dispatch({contextContent:undefined, reportUser: undefined, context: false});
+                }}><Text style={{fontSize:20, fontFamily:styles.fonts.fontBold, fontFamily: "Regular" }}>Report</Text></TouchableOpacity>
                
 
                     

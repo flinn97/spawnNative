@@ -43,16 +43,14 @@ render(){
        <Text style={{fontFamily:styles.fonts.fontBold, fontSize:18, color:styles.colors.Grey1}}>Profile</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity onPress={async ()=>{
-        await this.props.app.state.componentList.getOperationsFactory().cleanJsonPrepare({addpic:{owner:this.props.app.state.user.getJson()._id}});
-        let r =await this.props.app.state.componentList.getOperationsFactory().getUpdater("add");
-        
-        this.props.app.dispatch({myswitch: "createspawns", currentComponent:r[0]})}}
+        <TouchableOpacity onPress={this.props.app.dispatch.bind(this, {myswitch: "feed"})}
         style={{flexDirection: "column", justifyContent:"center", alignItems:"center"}}>
         <Image source={spawn} resizeMode="contain" style={{...styles.icon, width:51}}></Image>
-        <Text style={{fontSize:19, fontFamily: styles.fonts.fontTitle, position: "absolute", bottom: 31, left: 66, color: styles.colors.White1}}>+</Text>
-        <Text style={{fontFamily:styles.fonts.fontBold, fontSize:18, color:styles.colors.Grey1}}>New Spawn</Text>
-      </TouchableOpacity>
+        <View style={{display:"flex", flexDirection:"row"}}>
+          
+          <Text style={{fontFamily:styles.fonts.fontBold, fontSize:18, color:styles.colors.Grey1}}>Spawns</Text>
+          </View>
+        </TouchableOpacity>
 
         <TouchableOpacity onPress={this.props.app.dispatch.bind(this, {myswitch: "keep"})}
         style={{flexDirection: "column", justifyContent:"center", alignItems:"center"}}>
@@ -66,3 +64,4 @@ render(){
 }
 
 };
+

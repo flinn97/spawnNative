@@ -13,8 +13,9 @@ import {
   Image,
 } from 'react-native';
 import InputComponent from './inputComponent';
+import double from '../assets/moreimg_gs3.webp'
 
-
+import PicMap from './picMap';
 
 export default class Keep extends Component {
   constructor(props){
@@ -53,6 +54,23 @@ export default class Keep extends Component {
     }
     return arr
   }
+  componentDidMount(){
+    let list = this.props.app.state.componentList
+    let user = this.props.app.state.user;
+    let pics = [...list.getList("keepmonsters", user.getJson()._id), ...list.getList("keepheroes", user.getJson()._id), ...list.getList("keepstatblocks", user.getJson()._id), 
+  ...list.getList("keepworlds", user.getJson()._id), ...list.getList('keepmaps', user.getJson()._id)];
+  this.setState({pics:pics})
+  }
+  async componentDidUpdate(){
+    if(this.props.app.state.keepDeleted){
+      await this.props.app.dispatch({keepDeleted:false});
+      let list = this.props.app.state.componentList
+    let user = this.props.app.state.user;
+    let pics = [...list.getList("keepmonsters", user.getJson()._id), ...list.getList("keepheroes", user.getJson()._id), ...list.getList("keepstatblocks", user.getJson()._id), 
+  ...list.getList("keepworlds", user.getJson()._id), ...list.getList('keepmaps', user.getJson()._id)];
+  this.setState({pics:pics})
+    }
+  }
 
 render(){
   let app = this.props.app
@@ -67,37 +85,9 @@ render(){
     <SafeAreaView style={{width:700, height:"70%", background:styles.colors.White1, 
     display:"flex", justifyContent:"center", alignItems:"center", marginTop:7}}>
       <ScrollView style={{width:styles.width}}>
-        <TouchableOpacity onPress={dispatch.bind(this,{myswitch:"follow"})}><Text style={{...formStyles.buttonPositive, width:88, marginLeft: styles.margins.marginSm}}>Follow</Text></TouchableOpacity>
-        {pics.map((pic, index)=><View>
-
-        {pic.getJson().type.includes("keep")&&(
-        <View>
-          
-          <TouchableOpacity onPress={()=>{
-          let list = state.componentList.getList(pic.getJson().type.substring(4));
-          let i = 0
-          for(i;i<list.length;i++){
-            if(list[i].getJson()._id===pic.getJson().ogref){
-              break;
-            }
-          }
-        dispatch({index: i, switchcase:pic.getJson().type.substring(4), myswitch:"feed"})
-      }}>
-                         <ViewMedia scale={5} media={this.getPic(pic)} />
-
-        {/* <Image source={{uri:pic.getJson().picURL}} style={{width:200, height:200}}/>*/}
-        </TouchableOpacity> 
-      <View>
-        <InputComponent obj={pic} name="note" app={app} />
-        <TouchableOpacity
-        onPress={()=>{
-          state.componentList.getOperationsFactory().cleanPrepareRun({update:pic})
-        }}><Text>Submit</Text></TouchableOpacity>
-        </View>
-
-          </View>
-           )} 
-           </View>)}</ScrollView>
+      <View style={{marginTop:20, marginBottom:20, alignSelf:"center", display:'flex', flexDirection:"row"}}><Text style={{fontFamily: "Regular", color:"black", fontSize:30}}>My Keep</Text><Text style={{fontFamily: "Regular", color:"black",fontSize:10,marginLeft:5, }}>{this.state.pics?.length}</Text></View>
+      <PicMap app={app} pics = {this.state.pics} keep={true} />
+      </ScrollView>
     </SafeAreaView>
 
 );

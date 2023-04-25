@@ -1,6 +1,6 @@
 import topbar from "../assets/spawnLogo.png"
 import React, {Component} from 'react';
-import Menu1 from '../assets/menu-1.png';
+import Menu1 from '../assets/menu.png';
 
 import {
   Image,
@@ -38,19 +38,19 @@ render(){
 
     <View style={{width:"108%", height:117 , position: "absolute", top: 0, flexDirection:"row", alignSelf:"flex-start",
      backgroundColor:styles.colors.Color2, }}>
-              <TouchableOpacity onPress={this.props.menu} 
-              style={{position:"absolute", width:50, height:50, right:49, zIndex:600, top: 53}}>
-                <Image style={{width:40, height:undefined, aspectRatio:1}} resizeMode="contain" source={Menu1} />
-                </TouchableOpacity>
-
-      <TouchableOpacity style={{width:"100%", height:"100%", left:-44, marginTop:25,}} onPress={this.props.app.dispatch.bind(this, {myswitch: "feed"})}>
+       <TouchableOpacity style={{width:"100%", height:"100%", marginTop:35, paddingRight:60, }} onPress={this.props.app.dispatch.bind(this, {myswitch: "feed"})}>
         <Image resizeMode="contain" 
-      style={{width: styles.width,
-       height: undefined, aspectRatio: 4.61, alignSelf:"flex-start",
-      backgroundColor:styles.colors.Color2, alignSelf:"center",
+      style={{width:"60%" , height:"60%", aspectRatio: 4.61, 
+      backgroundColor:styles.colors.Color2, alignSelf:"center"
       
       }} source={topbar}></Image>
         </TouchableOpacity>
+              <TouchableOpacity onPress={this.props.menu} 
+              style={{position:"absolute", width:50, height:50, right:30, zIndex:600, top: 53}}>
+                <Image style={{width:40, height:undefined, aspectRatio:1}} resizeMode="contain" source={Menu1} />
+                </TouchableOpacity>
+
+     
     </View>
 
 );

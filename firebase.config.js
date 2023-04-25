@@ -4,14 +4,14 @@ import {getStorage} from "firebase/storage";
 import {getAuth} from "firebase/auth";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyDC6-LoVJthmOIMpFAsbf6XMKXRcIJwXWU",
-  authDomain: "flinnapps.firebaseapp.com",
   databaseURL: "https://flinnapps-default-rtdb.firebaseio.com",
-  projectId: "flinnapps",
-  storageBucket: "flinnapps.appspot.com",
-  messagingSenderId: "897486070631",
-  appId: "1:897486070631:web:bed8e6879ff6bc4662c5c2",
-  measurementId: "G-LH7RWHZ9R1"
+  apiKey: "AIzaSyAsCSTpKPzQsVx49J7lGS4DlJTtyDwhkfU",
+  authDomain: "spawn-810bf.firebaseapp.com",
+  projectId: "spawn-810bf",
+  storageBucket: "spawn-810bf.appspot.com",
+  messagingSenderId: "477573251377",
+  appId: "1:477573251377:web:1d7dba5ace6367d0caf010",
+  measurementId: "G-1YX5VJ83C4"
 };
 
 // Initialize Firebase

@@ -1,5 +1,6 @@
 
 import React, {Component} from 'react';
+import ViewMedia from './viewMedia';
 import {
   SafeAreaView,
   ScrollView,
@@ -12,18 +13,53 @@ import {
   Touchable
 } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
+import PicMap from './picMap.js';
 
 
 
-export default class Followin extends Component {
+export default class Following extends Component {
   constructor(props){
     super(props);
+    this.getPic=this.getPic.bind(this);
     this.state={
       center:{
         display:"flex", justifyContent:"center", alignItems:"center"
       }
 
     };
+  }
+  getPic(c){
+    let app = this.props.app;
+    let state = app.state;
+    let pic = c;
+    let arr =[]
+    if(pic.getJson().picURLs!==undefined){
+
+    
+    if(Object.keys(pic.getJson().picURLs)[0]){
+      
+      for (const key in pic?.getJson().picURLs){
+        arr.push(pic?.getJson().picURLs[key]);
+      }
+    }
+    else{
+      arr=[pic.getJson().picURL]
+    }
+  }
+    else{
+      arr=[pic.getJson().picURL]
+    }
+    return arr
+  }
+  componentDidMount(){
+    let list = this.props.app.state.componentList
+    let user = this.props.app.state.currentFollowing;
+    if(!user){
+      return
+    }
+    let pics = [...list.getList("monsters", user.getJson()._id), ...list.getList("heroes", user.getJson()._id), ...list.getList("statblocks", user.getJson()._id), 
+  ...list.getList("worlds", user.getJson()._id), ...list.getList('maps', user.getJson()._id)];
+  this.setState({pics:pics})
   }
 render(){
   let app = this.props.app
@@ -32,28 +68,61 @@ render(){
   let dispatch = app.dispatch;
   let state = app.state;
   let styles =state.styles;
+  let formStyles= state.formStyles;
 return (
 
-  <SafeAreaView style={{width:"100%", height:"60%", background:"white", display:"flex", justifyContent:"center", alignItems:"center", marginTop:70}}>
+  <SafeAreaView style={{width:styles.width, height:"65%", background:"white", display:"flex", justifyContent:"center", alignItems:"center", marginTop:0}}>
     <ScrollView>
-      {pics.map((pic, index)=><View>
+    <View style={{width:styles.width, display:"flex", flexDirection:"row"}}>
+    <View style={{display:"flex", flexDirection:"column", justifyContent:"center", alignItems:"center", marginLeft:20}}>      
+    <Image style={{
+                  width: 90,
+                  height: 90,
+                  marginLeft:15,
+                  objectFit: "scale-down", 
+                  borderRadius: "50%",
+                  background: ""}}
+                   source={{uri:state.currentFollowing?.getJson().picURL}}  />
+                  
+                   <Text style={{color:"black", fontFamily: "Regular", }}>{state.currentFollowing?.getJson().firstName} {state.currentFollowing?.getJson().lastName}</Text>
+                   
+</View>
+<View style={{display:"flex", justifyContent:'center', alignItems:"center", marginLeft:20}}><Text style={{fontFamily: "Regular", color:"black"}}>{this.state.pics?.length}</Text><Text style={{fontFamily: "Regular", color:"black"}}>Spawns</Text></View>
+<TouchableOpacity
+           style={{marginLeft:64, alignSelf:"center", borderRadius:7,...formStyles.buttonPositive, display:"flex", alignItems:"center", justifyContent:"center",width:100, }}
+              onPress={async() => {
+                let followComp =state.componentList.getList('follow', state.currentFollowing.getJson()._id, "followID");
+                followComp = followComp.filter(obj=>{return obj.getJson().owner= state.user?.getJson()._id})
 
-      {(pic.getJson().owner===state.currentFollowing.getJson()._id && !pic.getJson().type.includes("keep")) &&(
-      <View>
-       
-        <TouchableOpacity onPress={()=>{
-          let list = state.componentList.getList(pic.getJson().type);
-          let i = 0
-          for(i;i<list.length;i++){
-            if(list[i].getJson()._id===pic.getJson()._id){
-              break;
-            }
-          }
-        dispatch({index: i, switchcase:pic.getJson().type, myswitch:"feed"})
-        }}><Image source={{uri:pic.getJson().picURL}} style={{width:200, height:200}}/></TouchableOpacity>
-        </View>
-         )} 
-         </View>)}</ScrollView>
+                
+                if(followComp.length>=1){
+                  followComp = followComp[0];
+
+                  followComp.unFollow(state.componentList)
+
+                }
+                else{
+                  
+                  app.state.user?.follow(state.currentFollowing)
+                }
+               
+               }}
+              ><Text 
+              style={{ fontFamily: "Bold",
+              fontSize:18, borderRadius:7, color:"white"}}
+              >{state.componentList.getComponent('follow', state.currentFollowing.getJson().owner, "followID")!==undefined?("Unfollow"): ("Follow")}</Text>
+              </TouchableOpacity>              
+</View>
+<View style={{marginTop:10, marginLeft:20, width:300}}>
+      <View style={{display:'flex', flexDirection:'row', marginBottom:5}}><Text  style={{fontFamily: "Regular",color:"black", fontWeight:"bold"}}>About:</Text><Text style={{fontFamily: "Regular",color:"black", }}> {state.currentFollowing.getJson().about} </Text></View>
+      <View style={{display:'flex', flexDirection:'row', marginBottom:5}}><Text style={{fontFamily: "Regular",color:"black", fontWeight:"bold"}}>Website: </Text><Text style={{fontFamily: "Regular",color:"black", }}>{state.currentFollowing.getJson().website}</Text></View>
+      <View style={{display:'flex', flexDirection:'row', marginBottom:5}}><Text style={{fontFamily: "Regular",color:"black", fontWeight:"bold"}}>Social: </Text><Text style={{fontFamily: "Regular",color:"black", }}>{state.currentFollowing.getJson().socialHandle}</Text></View>
+      <Text style={{fontFamily: "Regular", marginTop:20, fontSize:20, marginBottom:20}}>Spawns:</Text>
+      </View>
+
+      
+      <PicMap app={app} pics = {this.state.pics} />
+        </ScrollView>
   </SafeAreaView>
 
 );

@@ -73,10 +73,10 @@ class styleService {
                 
                 alignSelf: "center",
 
-                shadowColor: '#000',
-                 shadowOffset: { width: 0, height: 2 },
-                shadowOpacity: 0.9,
-                shadowRadius: 2,
+                // shadowColor: '#000',
+                //  shadowOffset: { width: 0, height: 2 },
+                // shadowOpacity: 0.9,
+                // shadowRadius: 2,
                 elevation: 2, // for Android
             },
 

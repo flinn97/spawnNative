@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import {Button, SafeAreaView, StatusBar, StyleSheet, Text,TouchableOpacity} from 'react-native';
+
 // import DocumentPicker, {types} from 'react-native-document-picker';
 import * as ImagePicker from 'expo-image-picker';
 
@@ -53,13 +54,25 @@ async uploadImageAsync(uri) {
     xhr.open("GET", uri, true);
     xhr.send(null);
   });
-  // console.log("blob", blob);
   this.setState({ uploading: false });
+  
   const fileReaderInstance = new FileReader();
   fileReaderInstance.readAsDataURL(blob); 
   fileReaderInstance.onload = async () => {
-      base64data = fileReaderInstance.result;   
+      let base64data = fileReaderInstance.result;   
+      
+
+const sizeInBytes = blob.size;
+const sizeInKB = sizeInBytes / 1024; // Convert bytes to kilobytes
+if(sizeInKB>2000){
+        this.props.setPic(false);        
+
+}
+else{
       this.props.setPic(base64data, blob);        
+
+}
+
   }
   
   // const fileRef = ref(getStorage(), uuid.v4());
@@ -78,7 +91,7 @@ render(){
 
  
   return (
-    <TouchableOpacity style={{marginTop:100, width:200, height:50, backgroundColor:'#6C86F4', borderRadius:25, display:'flex', alignItems:'center', justifyContent:"center", }} onPress={this.addImage}><Text style={{color:'white', fontSize:28}}>Upload Photo</Text></TouchableOpacity>
+    <TouchableOpacity style={{marginTop:10, width:200, height:50, backgroundColor:'#A80303', borderRadius:7, display:'flex', alignItems:'center', justifyContent:"center", }} onPress={this.addImage}><Text style={{fontFamily: "Regular",color:'white', fontFamily: "Bold", fontSize:22}}>Upload Image</Text></TouchableOpacity>
   );
 }
 }

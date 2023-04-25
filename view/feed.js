@@ -6,7 +6,10 @@ import auth from '../services/auth';
 import ViewMedia from './viewMedia';
 import LikeHeart from '../assets/like_grey.png';
 import Keep from '../assets/keep_grey.png';
+import Keep1 from '../assets/keep2.png';
+import LikeHeart1 from '../assets/hrt2.png';
 
+import double from '../assets/moreimg_gs3.webp'
 const { width } = Dimensions.get('window')
 import {
   Image,
@@ -17,11 +20,15 @@ import {
   Text,
   useColorScheme,
   TouchableOpacity,Dimensions,
+  TouchableWithoutFeedback,
   View,
+  TouchableHighlight,
   
   
 } from 'react-native';
 import MappedPics from './mappedPics';
+import Comments from './commentMap';
+import CommentInput from './commentInput';
 
 
 
@@ -36,6 +43,29 @@ export default class Feed extends Component {
       marginRight:0
 
     };
+  }
+  componentDidMount(){
+    
+    let app = this.props.app;
+    let state= app.state;
+    let list = state.componentList;
+    let components = list.getComponents();
+    let newList = [];
+    let user = state.user
+    newList = components.filter(obj => {
+      return !Object.keys(user.getJson().blocked).includes(obj.getJson().owner)
+    })
+    newList = newList.filter(obj => {
+      return !Object.keys(user.getJson().hidden).includes(obj.getJson()._id)
+    })
+    list.setComponents(newList);
+    app.dispatch({});
+  }
+  async componentDidUpdate(){
+    if(this.props.app.state.componentsAdded){
+      await this.props.app.dispatch({componentsAdded:false});
+      this.componentDidMount()
+    }
   }
 
   getPic(c){
@@ -60,7 +90,7 @@ export default class Feed extends Component {
     else{
       arr=[pic.getJson().picURL]
     }
-    return arr
+    return [arr[0]]
   }
   
 render(){
@@ -69,16 +99,15 @@ render(){
   let styles=state.styles;
     let formStyles= state.formStyles;
   let dispatch=app.dispatch
-  let pic = state?.pic?.getJson().picURL;
-  let comps = state.componentList.getList("monsters");
+
   
   return (
     <View style={{width:"100%", height:"80%", padding: 8,
     background:styles.colors.White1, display:"flex", justifyContent:"center", 
-    alignItems:"center", marginTop:77,}}>
-      {state.pic&&(
-        <View style={{width:"100%", height:600,}}>
-        <SwipeRender style={{ backgroundColor:'#00000000'}} 
+    alignItems:"center", marginTop:30,}}>
+     
+        <View style={{width:500, height:600, display:"flex", justifyContent:"center", alignItems:"center"}}>
+        <SwipeRender style={{ backgroundColor:'#00000000', display:"flex", justifyContent:"center", alignItems:"center"}} 
 
       index={state.index}
       
@@ -90,21 +119,51 @@ render(){
           
             {state.componentList.getList(state.switchCase).map((c, index)=>
 
-            <View key={"SwipeRender-slide#" + index} style={ {backgroundColor: "#00000000", width:"100%", }}>
+            <View key={"SwipeRender-slide#" + index} style={ {backgroundColor: "#00000000", width:500, display:"flex", justifyContent:"center", alignItems:"center" }}>
+              
               {!Object.keys(state.user.getJson().blocked).includes(c.getJson().owner) && !Object.keys(state.user.getJson().hidden).includes(c.getJson()._id)&&(
-              <View style={{width:"100%", height:"100%",}}>
-              <TouchableOpacity  resizeMode="contain" style = {{height:400, width:"100%", }} onLongPress={async ()=>{
+              <SafeAreaView style={{width:"100%",display:"flex", justifyContent:"center", alignItems:"center" }}>
+                <ScrollView>
+                <TouchableOpacity style={{width:"100%", display:'flex', justifyContent:"center", alignItems:"center", color:"black", marginBottom:20}} onLongPress={async ()=>{
                 let reportUser = await state.componentList.getComponent("user", c.getJson().owner);
 
                 app.dispatch({contextContent:c, reportUser: reportUser, context: true});
-              }}>
+
+              }}><Text style={{color:"black", maxWidth:300, display:"flex", alignItems:"center", justifyContent:"center", fontSize:30, fontFamily: "Regular"}}>{c.getJson().name}</Text></TouchableOpacity>
+              <TouchableOpacity activeOpacity={100} onPress={()=>{
+                app.dispatch({currentPic:c, popupSwitch:"viewMedia"});
+              }} resizeMode="contain" style = {{height:400, width:"100%", display:"flex", justifyContent:"center", alignItems:"center" }} >
                  <ViewMedia  resizeMode="contain" scale={10} media={this.getPic(c)} />
             {/* <Image style={{ width:"100%", height:450 }} source={{uri:c?.getJson().picURL}}/> */}
+            {Object.keys(c.getJson().picURLs).length>1&&(<Image source = {double} style={{position:"absolute", color:"black", top:20, right:45, width:20, height:20}}  />)}
+           
             </TouchableOpacity>
-<View style={{height:44}}></View>
+            {state.componentList.getComponent("user", c.getJson().owner, "_id") &&(
+            <View style={{alignSelf:"flex-end", marginRight:50, marginTop:5, display:"flex", flexDirection:"row"}}>
+               
+            <Text style ={{color:"black", fontFamily: "Regular"}}>By: </Text>
+            <TouchableOpacity onPress={()=>{
+              let user = state.componentList.getComponent("user", c.getJson().owner, "_id");
+              dispatch({currentFollowing:user, myswitch:"following"})
+            }}>
+            <Text style={{textDecorationLine:"underline", fontFamily: "Regular", color:"black"}}>{state.componentList.getComponent("user", c.getJson().owner, "_id", true)?.getJson().spawnerHandle}</Text>
+            </TouchableOpacity>
+            </View>
+           )}
+            <View style={{marginTop:20}}>
+              {(c.getJson().description.length<120||this.state.showAll)?(
+                
+                <TouchableOpacity onPress={()=>{this.setState({showAll:false})}}>
+                <Text style={{maxWidth:300, alignSelf:"center", fontFamily: "Regular"}}>{c.getJson().description}</Text>
+                </TouchableOpacity>
+):(<TouchableOpacity onPress={()=>{this.setState({showAll:true})}}>
+<Text style={{maxWidth:300, alignSelf:"center", fontFamily: "Regular", color:"black"}}>{c.getJson().description.slice(0,120)}...</Text>
+</TouchableOpacity>)}
+            </View>
+<View style={{height:20}}></View>
 
              <View style={{backgroundColor:styles.colors.Grey1, borderTopWidth:2,
-              borderColor:styles.colors.Color2, flexDirection:"row", width:"100%", alignSelf:"center", 
+              borderColor:styles.colors.Color2, flexDirection:"row", width:300, alignSelf:"center", 
               padding:11, borderLeft:'#00000000', borderRadius:6, borderRightColor:'#00000000'
                }}>
               
@@ -114,7 +173,7 @@ render(){
        fontFamily: styles.fonts.fontBold, fontSize:20,
                        backgroundColor: "", marginRight: -5, 
           }}>{c.getJson().keep} </Text>
-       <Image source={Keep}  resizeMode="contain" style={{...styles.icon2, }} />
+       <Image source={!Object.keys(c.getJson().keepers).includes(state.user.getJson()._id) && c.getJson().owner.toString()!==state.user.getJson()._id.toString()?Keep:Keep1}  resizeMode="contain" style={{...styles.icon2, }} />
        </TouchableOpacity>
 
 
@@ -122,12 +181,16 @@ render(){
            <Text style={{fontFamily: styles.fonts.fontBold,
                          backgroundColor: "", fontSize:20,
           }}>{c.getJson().like} </Text>
-           <Image source={LikeHeart} resizeMode="contain" style={{...styles.icon2}} />
+           <Image source={!Object.keys(c.getJson().likers).includes(state.user.getJson()._id) && c.getJson().owner.toString()!==state.user.getJson()._id.toString()?LikeHeart: LikeHeart1} resizeMode="contain" style={{...styles.icon2}} />
            </TouchableOpacity>
 
            <TouchableOpacity
-           style={{flex:2, marginLeft:64, alignSelf:"center"}}
+           style={{marginLeft:64, alignSelf:"center", borderRadius:7,...formStyles.buttonPositive, display:"flex", alignItems:"center", justifyContent:"center",width:100, }}
               onPress={async() => {
+                if(state.componentList.getComponent('follow', c.getJson().owner, "followID")!==undefined)
+                {
+                  return;
+                }
                 let complist = app.state.componentList.getList("follow");
               let arr = [];
                for(const key in complist){
@@ -140,13 +203,23 @@ render(){
                }
                }}
               ><Text 
-              style={{...formStyles.buttonPositive, fontFamily: styles.fonts.fontBold, width:"100%", alignSelf:"flex-end"}}
-              >Follow</Text>
+              style={{ fontFamily: "Bold",
+              fontSize:18, borderRadius:7, color:"white"}}
+              >{state.componentList.getComponent('follow', c.getJson().owner, "followID")!==undefined?("Following"): ("Follow")}</Text>
               </TouchableOpacity>
 
 
            </View>
-           </View>)}
+           <View style = {{marginLeft:40}}>
+            <TouchableOpacity onPress={()=>{
+                app.dispatch({currentPic:c, popupSwitch:"viewMedia"});
+              }}>
+           <Text style={{color:"black", fontSize:13, marginLeft:50, fontFamily: "Regular"}}>Comments: {state.componentList.getList("comment", c.getJson()._id, "picOwner").length} </Text>
+           </TouchableOpacity>
+           </View>
+           <View style={{height:50}}></View>
+           </ScrollView>
+           </SafeAreaView>)}
         </View>
     
             )}
@@ -154,7 +227,7 @@ render(){
         </SwipeRender>
         </View>
 
-    )}
+    
     
     </View>
 

@@ -35,7 +35,7 @@ export default class InputComponent extends Component{
   }
    async componentDidMount(){
     if(!this.props.prepareOnPress){
-      await this.setState({obj:this.props.obj, value: this.props.obj.getJson()[this.props.name]})
+      await this.setState({obj:this.props.obj, value: this.props.obj?.getJson()[this.props.name]})
 
     }
   }
@@ -75,9 +75,12 @@ handleChange(value){
   if(this.props.handleChange!==undefined){
     this.props.handleChange(value)
   }
-  if(this.state.obj){
-    this.state.obj.setJson({...this.state.obj.getJson(), [this.props.name]:value})
+  else{
+    if(this.state.obj){
+      this.state.obj.setJson({...this.state.obj.getJson(), [this.props.name]:value})
+    }
   }
+  
 }
 onBlurEvent(){
   if(this.props.setOnDefocus){
@@ -92,9 +95,29 @@ render(){
 
   return (
         <TextInput
+        multiline={this.props.numberOfLines?true:false}
+        placeholder={this.props.placeholder}
         onFocus={this.prepareOnPress}
         onBlur={this.onBlurEvent}
-      style={{width:this.props.width? this.props.width:200, height:30, backgroundColor:this.props.backgroundColor, borderWidth: !this.props.border?1:0, borderRadius:7,  marginLeft:this.props.center?10:0, fontSize:this.props.fontSize, color:this.props.color}}
+        numberOfLines= {this.props.numberOfLines?this.props.numberOfLines:1}
+        returnKeyType={this.props.returnKeyType?this.props.returnKeyType:"done"}
+
+      style={{        
+
+       
+        width:this.props.width? this.props.width:200, height:this.props.height?this.props.height:30, 
+        backgroundColor:this.props.backgroundColor, 
+        paddingTop:this.props.paddingTop,
+        paddingLeft:this.props.paddingLeft,
+        borderWidth: this.props.borderWidth?this.props.borderWidth:!this.props.border?1:0, 
+        borderRadius:this.props.borderRadius?this.props.borderRadius:7, 
+         marginLeft:this.props.center?10:0, fontSize:this.props.fontSize, fontFamily:this.props.fontFamily, 
+         marginTop:this.props.marginTop, textAlignVertical:this.props.textAlignVertical, 
+         borderColor: this.props.borderColor,
+         borderTopColor:this.props.borderTopColor, borderRightColor:this.props.borderRightColor, 
+         borderLeftColor:this.props.borderLeftColor,
+         fontFamily:this.props.fontFamily?this.props.fontFamily: "Regular", 
+         color:this.props.color?this.props.color:"black"}}
         onChangeText={(text)=>{
           this.handleChange(text)
         }}
